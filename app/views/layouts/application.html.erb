@@ -78,6 +78,12 @@
   </div>
   <!-- Main content -->
   <main class="main">
+    <% if notice.present? %>
+      <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
+    <% end %>
+    <% if alert.present? %>
+      <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
+    <% end %>
 
     <div class="container-fluid">
       <%= yield %>
