@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'Tinos';
+  font-style: normal;
+  font-weight: normal;
+  src: url(Tinos-Regular.ttf);
+}
+@font-face {
+  font-family: 'DavidLibre';
+  font-style: normal;
+  font-weight: normal;
+  src: url(DavidLibre-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'NotoSerif';
+  font-style: normal;
+  font-weight: normal;
+  src: url(NotoSerif-Regular.ttf);
+}
+@font-face {
+  font-family: 'RobotoMono';
+  font-style: normal;
+  font-weight: normal;
+  src: url(RobotoMono-Regular.ttf);
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: normal;
+  src: url(Roboto-Regular.ttf);
+}
+@font-face {
+  font-family: 'OpenSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url(OpenSans-Regular.ttf);
+}
+@font-face {
+  font-family: 'Cousine';
+  font-style: normal;
+  font-weight: normal;
+  src: url(Cousine-Regular.ttf);
+}
+
+
+ul.passage {
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.passage li {
+  margin: 2px 5px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.word {
+  text-shadow: 4px 4px 4px #aaa;
+  font-size: 125%;
+  margin: 0;
+}
+
+.lemma {
+  font-size: 80%;
+}
+
+div.he {
+  direction: rtl;
+  text-align: right;
+}
+
+span.he {
+  font-size: 180%;
+  font-family: 'Tinos', serif;
+}
+
+span.grc {
+  font-size: 130%;
+  font-family: 'NotoSerif', serif;
+}
+
+.row-0 {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.row-0 div {
+  padding-right: 0px;
+  padding-left: 0px;
+}

@@ -78,6 +78,14 @@
         <ul class="nav">
           <li class="nav-item nav-dropdown">
             <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-star"></i>聖書メニュー</a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item">
+                <a class="nav-link pl-4" href="/bibles"><i class="fa fa-book"></i>聖書閲覧</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pl-4" href="/bibles/sword"><i class="icon-menu"></i>モジュール一覧</a>
+              </li>
+            </ul>
           </li>
         </ul>
 
@@ -86,18 +94,18 @@
     </div>
     <!-- Main content -->
     <main class="main">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/"><i class="icon-home"></i> Home</a>
+        </li>
+      </ol>
+
       <% if notice.present? %>
         <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
       <% end %>
       <% if alert.present? %>
         <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
       <% end %>
-
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/"><i class="icon-home"></i> Home</a>
-        </li>
-      </ol>
 
       <div class="container-fluid">
         <%= yield %>

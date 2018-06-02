@@ -1,0 +1,104 @@
+<style>
+  #book { width: 200px; }
+  #chapter { width: 80px; margin-left: 5px; }
+  #verse1,#verse2 { width: 80px; margin-left: 5px; }
+
+  fieldset.fieldset {
+    border: 1px groove #ddd !important;
+    padding: 0 5px 5px 5px !important;
+    margin: 5px !important;
+  }
+
+  legend.fieldset {
+    font-size: 90% !important;
+    font-weight: normal !important;
+    text-align: left !important;
+    width:auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: none;
+  }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+    $('.select2').select2({theme: "bootstrap"});
+  });
+</script>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fa fa-align-justify"></i> 聖書閲覧
+  </div>
+  <div class="card-body">
+    <%= form_tag({controller: :bibles, action: :index}, {method: :get}) do %>
+      <div class="form-inline">
+        <%= select_tag :book, options_for_select(@books, params[:book]), include_blank: false, class: 'form-control select2'  %>
+        <%= number_field_tag :chapter, params[:chapter], placeholder: '章', class: 'form-control' %>
+        <%= number_field_tag :verse1, params[:verse1], placeholder: '節', class: 'form-control' %>
+        <%= number_field_tag :verse2, params[:verse2], placeholder: '節', class: 'form-control', style: 'margin-right:10px;' %>
+
+        <a role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-translations"
+           class="btn btn-secondary ml-sm-2" href="#collapse-translations">翻訳
+        </a>
+        <a role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapse-audio"
+           class="btn btn-secondary ml-sm-1 collapsed" href="#collapse-audio">
+          朗読
+        </a>
+        <input type="submit" class="btn btn-primary ml-sm-1">
+      </div>
+
+      <div class="collapse" id="collapse-translations">
+        <div class="well" style="padding:5px;margin-top:10px;">
+          <table class="table table-condensed">
+            <tbody>
+              <% @bibles.each do |lang, bibles| %>
+                <tr>
+                  <th><%= lang %></th>
+                  <td>
+                    <% bibles.each do |bible| %>
+                      <% id = "modules_#{bible.code}" %>
+                      <label for="<%= id %>">
+                        <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id %>
+                        <%= bible.short_name %>
+                      </label>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="collapse" id="collapse-audio">
+        <div class="well" style="padding:5px;margin-top: 10px;">
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<% if @passages.present? %>
+  <% (@verse1..@verse2).each do |verse| %>
+    <div class="card">
+      <div class="card-header" style="padding:4px 10px;">
+        <strong><%= @chapter %>:<%= verse %></strong>&nbsp;
+      </div>
+      <div class="card-body" style="padding:5px;">
+        <div class="row row-0">
+          <% langs = @passages.keys.length %>
+          <% col_class = 'col-md-' + (12/langs).to_s %>
+          <% @passages.each do |lang, passages| %>
+            <div class="<%= col_class %>">
+              <% passages.each do |code, passage| %>
+                <%= render 'passage', passage: passage[verse], lang: lang, name: @select_modules[code].name %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

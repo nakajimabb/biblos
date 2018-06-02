@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header">SWORD モジュール一覧</div>
+  <!-- /.box-header -->
+  <div class="card-body">
+    <table class="table table-condensed">
+      <tbody>
+        <tr>
+          <th style="width: 50px">name</th>
+          <th style="width: 40px">lang</th>
+          <th style="width: 150px">type</th>
+          <th>about</th>
+        </tr>
+        <% @modules.each do |name, info| %>
+          <tr>
+            <td><strong><%= name %></strong></td>
+            <td><%= info['lang'] %></td>
+            <td><%= info['type'] %></td>
+            <td>
+              <%= simple_format(info['desc']) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.box-body -->
+</div>
+

@@ -1,0 +1,17 @@
+<h3><%= @title %></h3>
+
+<%= form_tag({:action => @action}, :multipart => true) do %>
+  <% if @enable_file %>
+    <div class="form-group">
+      <%= file_field_tag :file %>
+    </div>
+  <% end %>
+  <%= hidden_field_tag :module_code, params[:module_code] %>
+  <%= submit_tag '実行', class: 'btn btn-primary' %>
+<% end %>
+
+<% if @messages.present? %>
+  <% @messages.each do |message| %>
+    <%= message %> <br>
+  <% end %>
+<% end %>

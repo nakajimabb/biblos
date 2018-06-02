@@ -20,5 +20,6 @@
 //= require coreui/vendors/js/gauge.min.js
 //= require coreui/vendors/js/moment.min.js
 //= require coreui/vendors/js/daterangepicker.min.js
+//= require coreui/vendors/js/select2.min.js
 //= require turbolinks
 //= require_tree .

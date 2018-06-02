@@ -19,5 +19,7 @@
  *= require coreui/vendors/css/daterangepicker.min.css
  *= require coreui/vendors/css/gauge.min.css
  *= require coreui/vendors/css/toastr.min.css
+ *= require coreui/vendors/css/select2.min.css
+ *= require bible.css
  *= require_self
  */

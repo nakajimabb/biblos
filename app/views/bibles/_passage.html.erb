@@ -1,0 +1,20 @@
+<fieldset class="fieldset bg-light">
+  <legend class="fieldset"><%= name %></legend>
+  <div class="<%= lang %>">
+    <ul class="passage">
+      <% passage.each do |word| %>
+        <li>
+          <span class="word <%= lang %>"><%= word.text %></span>
+          <% if word.lemma.present? %>
+            <br>
+            <span class="lemma"><%= word.lemma %></span>
+          <% end %>
+          <% if word.morph.present? %>
+            <br>
+            <span class="morph"><%= word.morph %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</fieldset>
