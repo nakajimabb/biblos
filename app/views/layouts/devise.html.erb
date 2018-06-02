@@ -1,0 +1,43 @@
+<!--
+ * CoreUI Pro - Bootstrap 4 Admin Template
+ * @version v1.0.8
+ * @link http://coreui.io/pro/
+ * Copyright (c) 2018 creativeLabs Łukasz Holeczek
+ * @license http://coreui.io/pro/license/
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CoreUI Pro - Bootstrap 4 Admin Template">
+  <meta name="author" content="Łukasz Holeczek">
+  <meta name="keyword" content=",">
+  <link rel="shortcut icon" href="<%= image_path('coreui/img/favicon.png') %>">
+  <title>CoreUI Pro - Bootstrap 4 Admin Template</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body class="app flex-row align-items-center">
+  <div class="container">
+    <%= yield %>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <% if notice.present? %>
+          <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
+        <% end %>
+        <% if alert.present? %>
+          <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
