@@ -52,54 +52,63 @@
 -->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-<header class="app-header navbar">
-  <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand" href="#"></a>
-  <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <ul class="nav navbar-nav d-md-down-none mr-auto">
-    <li class="nav-item px-3">
-      <a class="nav-link" href="/">Home</a>
-    </li>
-  </ul>
-  <ul class="nav navbar-nav ml-auto">
-    <li class="nav-item px-3">
-      <%= link_to t('menu.user.sign_out'), destroy_user_session_path, method: :delete, class: 'btn btn-default btn-flat' %>
-    </li>
-  </ul>
-</header>
-<div class="app-body">
-  <div class="sidebar">
-    <nav class="sidebar-nav">
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/"><i class="icon-home"></i> Home</a>
-        </li>
+  <header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="nav navbar-nav d-md-down-none mr-auto">
+      <li class="nav-item px-3">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item px-3">
+        <%= link_to t('menu.user.sign_out'), destroy_user_session_path, method: :delete, class: 'btn btn-default btn-flat' %>
+      </li>
+    </ul>
+  </header>
+  <div class="app-body">
+    <div class="sidebar">
+      <nav class="sidebar-nav">
 
-      </ul>
-    </nav>
-    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-  </div>
-  <!-- Main content -->
-  <main class="main">
-    <% if notice.present? %>
-      <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
-    <% end %>
-    <% if alert.present? %>
-      <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
-    <% end %>
+        <ul class="nav">
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-star"></i>聖書メニュー</a>
+          </li>
+        </ul>
 
-    <div class="container-fluid">
-      <%= yield %>
+      </nav>
+      <button class="sidebar-minimizer brand-minimizer" type="button"></button>
     </div>
-    <!-- /.conainer-fluid -->
-  </main>
+    <!-- Main content -->
+    <main class="main">
+      <% if notice.present? %>
+        <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
+      <% end %>
+      <% if alert.present? %>
+        <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
+      <% end %>
 
-</div>
-</footer>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/"><i class="icon-home"></i> Home</a>
+        </li>
+      </ol>
 
+      <div class="container-fluid">
+        <%= yield %>
+      </div>
+      <!-- /.conainer-fluid -->
+    </main>
+
+    <script>
+      <%= render 'layouts/app.js' %>
+    </script>
+  </div>
 </body>
 </html>
+

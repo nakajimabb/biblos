@@ -16,7 +16,6 @@
 //= require coreui/vendors/js/popper.min.js
 //= require coreui/vendors/js/bootstrap.min.js
 //= require coreui/vendors/js/pace.min.js
-//= require coreui/js/app.js
 //= require coreui/vendors/js/toastr.min.js
 //= require coreui/vendors/js/gauge.min.js
 //= require coreui/vendors/js/moment.min.js
