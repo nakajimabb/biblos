@@ -1,0 +1,17 @@
+<% if @vocabularies.present? %>
+  <div class="card">
+    <div class="card-body">
+      <h4>
+        <% vocabulary = @vocabularies.first %>
+        <span class="<%= vocabulary.dictionary.lang %>"><b><%= vocabulary.spell %></b></span>
+        (<%= vocabulary.lemma %>) -- <%= vocabulary.transliteration %>
+      </h4>
+      <% @vocabularies.each do |vocabulary| %>
+        <div style="margin-left: 10px;">
+          <b><%= vocabulary.dictionary.name %>'s Definition</b>
+          <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

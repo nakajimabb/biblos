@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_02_074140) do
+ActiveRecord::Schema.define(version: 2018_06_04_125353) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -49,6 +49,24 @@ ActiveRecord::Schema.define(version: 2018_06_02_074140) do
     t.index ["code"], name: "index_bibles_on_code", unique: true
     t.index ["group_id"], name: "index_bibles_on_group_id"
     t.index ["user_id"], name: "index_bibles_on_user_id"
+  end
+
+  create_table "dictionaries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name"
+    t.string "short_name"
+    t.integer "lang", limit: 1
+    t.integer "module_type", limit: 1, default: 2, null: false
+    t.integer "rank"
+    t.bigint "group_id"
+    t.bigint "user_id"
+    t.integer "auth", limit: 1, default: 1, null: false
+    t.boolean "hidden", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_dictionaries_on_code", unique: true
+    t.index ["group_id"], name: "index_dictionaries_on_group_id"
+    t.index ["user_id"], name: "index_dictionaries_on_user_id"
   end
 
   create_table "group_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -94,9 +112,26 @@ ActiveRecord::Schema.define(version: 2018_06_02_074140) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "vocabularies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "dictionary_id", null: false
+    t.string "spell", null: false
+    t.string "lemma", null: false
+    t.text "meaning"
+    t.string "outline"
+    t.string "pronunciation"
+    t.string "transliteration"
+    t.string "etymology"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dictionary_id"], name: "index_vocabularies_on_dictionary_id"
+  end
+
   add_foreign_key "bibles", "groups"
   add_foreign_key "bibles", "users"
+  add_foreign_key "dictionaries", "groups"
+  add_foreign_key "dictionaries", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "groups", "users"
+  add_foreign_key "vocabularies", "dictionaries"
 end

@@ -18,13 +18,44 @@
     padding: 0 !important;
     border-bottom: none;
   }
+
+  .tooltip-inner{
+    max-width: 350px;
+  }
 </style>
 
+
 <script type="text/javascript" charset="utf-8">
+  function hover_lemma(){
+    var e = $(this);
+    var lemma = e.data('lemma');
+    var msg;
+
+    var req = "/dictionaries/get.json?lemma=" + lemma;
+    $.ajax(req, {
+      async: false,
+      success: function(data){
+        msg = "<p style=\"text-align: center;border-bottom: 1px solid #888;margin: 0;\">";
+        msg += "<span class=\"" + data["lang"] + "\">" + data["spell"] + "</span>";
+        msg += " (" + data["lemma"] + ")  -- " + data["transliteration"] + "</p>";
+        msg += '<div style="text-align: left;">';
+        msg += '<p>' + data["meaning"].replace(/\n/g, '<br>') + '</p>';
+        msg += '</div>';
+      }
+    });
+    return msg;
+  }
+
   $(function () {
     $('.select2').select2({theme: "bootstrap"});
+    $('[data-toggle="tooltip_lemma"]').tooltip({
+      title: hover_lemma,
+      html: true,
+      container: 'body'
+    });
   });
 </script>
+
 
 <div class="card">
   <div class="card-header">

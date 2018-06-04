@@ -7,7 +7,9 @@
           <span class="word <%= lang %>"><%= word.text %></span>
           <% if word.lemma.present? %>
             <br>
-            <span class="lemma"><%= word.lemma %></span>
+            <span class="lemma"  data-placement="bottom" data-toggle="tooltip_lemma" data-content="something" data-lemma="<%= word.lemma %>" >
+              <%= link_to word.lemma, {controller: :dictionaries, action: :get, lemma: word.lemma}, target: '_blank' %>
+            </span>
           <% end %>
           <% if word.morph.present? %>
             <br>

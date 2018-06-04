@@ -7,4 +7,8 @@ Rails.application.routes.draw do
   post 'bibles/import_sword_exec', to: 'bibles#import_sword_exec'
   get 'bibles/sword'
   resources :bibles, :only => [:index]
+
+  get 'dictionaries/get'
+  get 'dictionaries/import_vocab'
+  post 'dictionaries/load_vocab', to: 'dictionaries#load_vocab'
 end
