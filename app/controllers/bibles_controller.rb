@@ -11,7 +11,7 @@ class BiblesController < ApplicationController
       @books = ot_books + nt_books
 
       @bibles = {}
-      Bible.all.each do |bible|
+      Bible.all(current_user.id).each do |bible|
         @bibles[bible.lang] ||= []
         @bibles[bible.lang] << bible
       end
@@ -22,7 +22,7 @@ class BiblesController < ApplicationController
         @verse1 = params[:verse1].to_i
         @verse2 = params[:verse2].to_i
         @select_modules = {}
-        Bible.where(code: params[:modules]).each do |bible|
+        Bible.all(current_user.id).where(code: params[:modules]).each do |bible|
           @select_modules[bible.code] = bible
           passages = bible.get_passages(params[:book], @chapter, @verse1, @verse2)
           if passages.present?

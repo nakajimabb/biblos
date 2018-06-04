@@ -60,7 +60,7 @@
                       <% id = "modules_#{bible.code}" %>
                       <label for="<%= id %>">
                         <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id %>
-                        <%= bible.short_name %>
+                        <%= bible.name %>
                       </label>
                     <% end %>
                   </td>

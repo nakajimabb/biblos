@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2018_06_02_074140) do
     t.bigint "group_id"
     t.bigint "user_id"
     t.integer "auth", limit: 1, default: 1, null: false
+    t.boolean "hidden", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_bibles_on_code", unique: true
