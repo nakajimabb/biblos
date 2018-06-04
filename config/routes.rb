@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   get 'dictionaries/get'
   get 'dictionaries/import_vocab'
   post 'dictionaries/load_vocab', to: 'dictionaries#load_vocab'
+
+  get 'morph_codes/get'
+  get 'morph_codes/import'
+  post 'morph_codes/load', to: 'morph_codes#load'
 end

@@ -1,0 +1,2 @@
+class MorphCode < ApplicationRecord
+end

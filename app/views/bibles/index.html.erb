@@ -46,10 +46,34 @@
     return msg;
   }
 
+  function hover_morph(){
+    var e = $(this);
+    var parsing = e.text();
+    var msg;
+
+    var req = "/morph_codes/get.json?parsing=" + parsing;
+    $.ajax(req, {
+      async: false,
+      success: function(data){
+        msg = "<p style=\"text-align: center;border-bottom: 1px solid #888;margin: 0;\">";
+        msg += "<span>" + data["parsing"] + " (" + data["scheme"] + ")" + "</span>";
+        msg += '<div style="text-align: left;">';
+        msg += '<p>' + data["remark"].replace(/\n/g, '<br>') + '</p>';
+        msg += '</div>';
+      }
+    });
+    return msg;
+  }
+
   $(function () {
     $('.select2').select2({theme: "bootstrap"});
     $('[data-toggle="tooltip_lemma"]').tooltip({
       title: hover_lemma,
+      html: true,
+      container: 'body'
+    });
+    $('.morph').tooltip({
+      title: hover_morph,
       html: true,
       container: 'body'
     });
