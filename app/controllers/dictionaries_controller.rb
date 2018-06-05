@@ -1,10 +1,10 @@
 class DictionariesController < ApplicationController
   def get
     if params[:lemma].present?
-      lemmas = params[:lemma].scan(/[GH][0-9]+/) if params[:lemma].present?
+      m = params[:lemma].match(/([GH])([0-9]+)/) if params[:lemma].present?
 
-      if lemmas.present?
-        @lemma = lemmas[0]
+      if m.present?
+        @lemma = m[1] + m[2].to_i.to_s
         @vocabularies = Vocabulary.where(lemma: @lemma)
         respond_to do |format|
           format.html { render :get }
