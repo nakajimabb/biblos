@@ -46,4 +46,35 @@ class MorphCodesController < ApplicationController
       redirect_to({:action => :import}, alert: e.message)
     end
   end
+
+  def import_oshm
+    @title = 'morph データ 読込'
+    @action = :load_oshm
+    @enable_file = true
+    render 'shared/simple_form'
+  end
+
+  def load_oshm
+    begin
+      parsing = nil
+      file = params[:file].read
+      file.each_line do |line|
+        next if line.blank?
+        m = line.match(/^\$\$\$/)
+        if m.present?
+          parsing = line[3...-1]
+        elsif line.present?
+          m = line[0...-1].match(/\w+\.\s+(.+)/)
+          MorphCode.create!(scheme: 'OSHM', parsing: parsing, remark: m[1])
+          parsing = nil
+        else
+          parsing = nil
+        end
+      end
+
+      redirect_to({:action => :import_oshm}, notice: 'successfully imported')
+    rescue => e
+      redirect_to({:action => :import_oshm}, alert: e.message)
+    end
+  end
 end

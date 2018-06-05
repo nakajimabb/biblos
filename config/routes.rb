@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   get 'morph_codes/get'
   get 'morph_codes/import'
   post 'morph_codes/load', to: 'morph_codes#load'
+  get 'morph_codes/import_oshm'
+  post 'morph_codes/load_oshm', to: 'morph_codes#load_oshm'
 end
