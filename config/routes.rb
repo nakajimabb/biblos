@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   get 'dictionaries/import_vocab'
   post 'dictionaries/load_vocab', to: 'dictionaries#load_vocab'
 
-  get 'morph_codes/get'
-  get 'morph_codes/import'
-  post 'morph_codes/load', to: 'morph_codes#load'
-  get 'morph_codes/import_oshm'
-  post 'morph_codes/load_oshm', to: 'morph_codes#load_oshm'
+  get 'morphologies/get'
+  get 'morphologies/import'
+  post 'morphologies/load', to: 'morphologies#load'
+  get 'morphologies/import_oshm'
+  post 'morphologies/load_oshm', to: 'morphologies#load_oshm'
 end

@@ -1,14 +1,14 @@
-class MorphCodesController < ApplicationController
+class MorphologiesController < ApplicationController
   def get
     parsing = params[:parsing].strip.split.at(0)
     if parsing.present?
-      @morph = MorphCode.where(parsing: parsing).order(:scheme).first
+      @morph = MorphCode.where(parsing: parsing).joins(:morphology).order('morphologies.rank').first
 
       if @morph.present?
         respond_to do |format|
           format.html { render :get }
           format.json do
-            hash = { scheme: @morph.scheme, parsing: @morph.parsing, remark: @morph.remark }
+            hash = { code: @morph.morphology.try(:code), parsing: @morph.parsing, remark: @morph.remark }
             render json: hash.try(:to_json)
           end
         end
@@ -35,7 +35,11 @@ class MorphCodesController < ApplicationController
           params = {}
           header.each_with_index do |col, i|
             val = row[i]
-            params[col.to_sym] = val.try(:force_encoding, 'utf-8')
+            if col == 'morphology_code'
+              params[:morphology_id] = Morphology.find_by(code: val).try(:id)
+            else
+              params[col.to_sym] = val
+            end
           end
           MorphCode.create!(params)
         end
@@ -57,6 +61,7 @@ class MorphCodesController < ApplicationController
   def load_oshm
     begin
       parsing = nil
+      morphology = Morphology.find_by(code: :OSHM)
       file = params[:file].read
       file.each_line do |line|
         next if line.blank?
@@ -65,7 +70,7 @@ class MorphCodesController < ApplicationController
           parsing = line[3...-1]
         elsif line.present?
           m = line[0...-1].match(/\w+\.\s+(.+)/)
-          MorphCode.create!(scheme: 'OSHM', parsing: parsing, remark: m[1])
+          MorphCode.create!(morphology_id: morphology.id, parsing: parsing, remark: m[1])
           parsing = nil
         else
           parsing = nil

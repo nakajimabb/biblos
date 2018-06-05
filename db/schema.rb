@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_04_164548) do
+ActiveRecord::Schema.define(version: 2018_06_05_125112) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -92,11 +92,30 @@ ActiveRecord::Schema.define(version: 2018_06_04_164548) do
   end
 
   create_table "morph_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "scheme"
-    t.string "parsing"
+    t.bigint "morphology_id", null: false
+    t.string "parsing", null: false
     t.string "remark"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["morphology_id"], name: "index_morph_codes_on_morphology_id"
+  end
+
+  create_table "morphologies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name"
+    t.string "short_name"
+    t.integer "lang", limit: 1
+    t.integer "module_type", limit: 1, default: 2, null: false
+    t.integer "rank"
+    t.bigint "group_id"
+    t.bigint "user_id"
+    t.integer "auth", limit: 1, default: 1, null: false
+    t.boolean "hidden", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_morphologies_on_code", unique: true
+    t.index ["group_id"], name: "index_morphologies_on_group_id"
+    t.index ["user_id"], name: "index_morphologies_on_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -141,5 +160,8 @@ ActiveRecord::Schema.define(version: 2018_06_04_164548) do
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "groups", "users"
+  add_foreign_key "morph_codes", "morphologies"
+  add_foreign_key "morphologies", "groups"
+  add_foreign_key "morphologies", "users"
   add_foreign_key "vocabularies", "dictionaries"
 end
