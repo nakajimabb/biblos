@@ -6,8 +6,8 @@ class BiblesController < ApplicationController
       params[:verse2]   = 1 if params[:verse2].blank?
       params[:verse2] = params[:verse1] if params[:verse2].to_i < params[:verse1].to_i
 
-      ot_books = Canon::OT_BOOKS.map { |book| [book[0], book[1]] }
-      nt_books = Canon::NT_BOOKS.map { |book| [book[0], book[1]] }
+      ot_books = Canon::BOOKS[:ot].map { |book| [book[0], book[1]] }
+      nt_books = Canon::BOOKS[:nt].map { |book| [book[0], book[1]] }
       @books = ot_books + nt_books
 
       @bibles = {}

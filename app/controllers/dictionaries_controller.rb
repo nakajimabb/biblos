@@ -6,11 +6,19 @@ class DictionariesController < ApplicationController
       if m.present?
         @lemma = m[1] + m[2].to_i.to_s
         @vocabularies = Vocabulary.where(lemma: @lemma)
+        bible_ids = VocabCount.where(lemma: @lemma).group(:bible_id).pluck(:bible_id)
+        @bibles = Bible.where(id: bible_ids)
+
         respond_to do |format|
           format.html { render :get }
           format.json do
             vocabulary = @vocabularies.first
-            hash = {spell: vocabulary.spell, lemma: vocabulary.lemma, meaning: vocabulary.meaning,
+            meaning = vocabulary.meaning
+            meaning += "\n"
+            @bibles.each do |bible|
+              meaning += bible.code + '(' + VocabCount.where(bible_id: bible.id, lemma: @lemma).sum(:count).to_s + ') '
+            end
+            hash = {spell: vocabulary.spell, lemma: vocabulary.lemma, meaning: meaning,
                     pronunciation: vocabulary.pronunciation, transliteration: vocabulary.transliteration,
                     lang: vocabulary.dictionary.lang}
             render json: hash.try(:to_json)

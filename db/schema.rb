@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_05_125112) do
+ActiveRecord::Schema.define(version: 2018_06_06_121025) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -139,6 +139,28 @@ ActiveRecord::Schema.define(version: 2018_06_05_125112) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "vocab_counts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "bible_id", null: false
+    t.integer "book_code", limit: 2, null: false
+    t.string "lemma"
+    t.integer "count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bible_id", "book_code", "lemma"], name: "index_vocab_counts_on_bible_id_and_book_code_and_lemma", unique: true
+    t.index ["bible_id"], name: "index_vocab_counts_on_bible_id"
+  end
+
+  create_table "vocab_indices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "vocab_count_id", null: false
+    t.integer "chapter", limit: 2, null: false
+    t.integer "verse", limit: 2, null: false
+    t.integer "count", limit: 1, default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vocab_count_id", "chapter", "verse"], name: "index_vocab_indices_on_vocab_count_id_and_chapter_and_verse", unique: true
+    t.index ["vocab_count_id"], name: "index_vocab_indices_on_vocab_count_id"
+  end
+
   create_table "vocabularies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "dictionary_id", null: false
     t.string "spell", null: false
@@ -163,5 +185,7 @@ ActiveRecord::Schema.define(version: 2018_06_05_125112) do
   add_foreign_key "morph_codes", "morphologies"
   add_foreign_key "morphologies", "groups"
   add_foreign_key "morphologies", "users"
+  add_foreign_key "vocab_counts", "bibles"
+  add_foreign_key "vocab_indices", "vocab_counts"
   add_foreign_key "vocabularies", "dictionaries"
 end

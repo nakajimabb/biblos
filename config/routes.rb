@@ -17,4 +17,7 @@ Rails.application.routes.draw do
   post 'morphologies/load', to: 'morphologies#load'
   get 'morphologies/import_oshm'
   post 'morphologies/load_oshm', to: 'morphologies#load_oshm'
+
+  get '/vocab_indices/scan'
+  post '/vocab_indices/scan_exec', to: 'vocab_indices#scan_exec'
 end
