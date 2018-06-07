@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_06_121025) do
+ActiveRecord::Schema.define(version: 2018_06_07_163539) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,35 @@ ActiveRecord::Schema.define(version: 2018_06_06_121025) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "audio_bibles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name"
+    t.string "short_name"
+    t.integer "lang", limit: 1
+    t.integer "record_type", limit: 1, default: 1, null: false
+    t.integer "rank"
+    t.bigint "group_id"
+    t.bigint "user_id"
+    t.integer "auth", limit: 1, default: 1, null: false
+    t.boolean "hidden", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_audio_bibles_on_code", unique: true
+    t.index ["group_id"], name: "index_audio_bibles_on_group_id"
+    t.index ["user_id"], name: "index_audio_bibles_on_user_id"
+  end
+
+  create_table "audio_segments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "audio_bible_id"
+    t.integer "book_code", limit: 2, null: false
+    t.integer "chapter", limit: 2, null: false
+    t.integer "verse", limit: 2, null: false
+    t.float "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["audio_bible_id"], name: "index_audio_segments_on_audio_bible_id"
   end
 
   create_table "bibles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -175,6 +204,9 @@ ActiveRecord::Schema.define(version: 2018_06_06_121025) do
     t.index ["dictionary_id"], name: "index_vocabularies_on_dictionary_id"
   end
 
+  add_foreign_key "audio_bibles", "groups"
+  add_foreign_key "audio_bibles", "users"
+  add_foreign_key "audio_segments", "audio_bibles"
   add_foreign_key "bibles", "groups"
   add_foreign_key "bibles", "users"
   add_foreign_key "dictionaries", "groups"

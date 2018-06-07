@@ -20,4 +20,7 @@ Rails.application.routes.draw do
 
   get '/vocab_indices/scan'
   post '/vocab_indices/scan_exec', to: 'vocab_indices#scan_exec'
+
+  get '/audio_segments/import'
+  post '/audio_segments/load', to: 'audio_segments#load'
 end
