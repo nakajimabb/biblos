@@ -8,6 +8,7 @@ class Bible < ApplicationRecord
   enum lang: {he: 1, grc: 2, ja: 3, en: 4, la: 5, ar: 6, fr: 7}
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
 
+  @@sword = {}
 
   Word = Struct.new(:text, :lemma, :morph) do
     def lemma_code
@@ -26,7 +27,7 @@ class Bible < ApplicationRecord
   end
 
   def get_passages(book_code, chapter, verse1, verse2)
-    sword = Sword::Sword.new(self.code)
+    sword = Bible.get_sword_module(self.code)
     words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
     result = {}
     (verse1..verse2).each_with_index do |verse, i|
@@ -54,5 +55,11 @@ class Bible < ApplicationRecord
       end
     end
     modules
+  end
+
+private
+
+  def Bible.get_sword_module(code)
+    @@sword[code] ||= Sword::Sword.new(code)
   end
 end

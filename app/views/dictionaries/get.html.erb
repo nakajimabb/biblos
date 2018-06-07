@@ -1,3 +1,30 @@
+<style>
+  #book { width: 200px; }
+  #chapter { width: 80px; margin-left: 5px; }
+  #verse1,#verse2 { width: 80px; margin-left: 5px; }
+
+  fieldset.fieldset {
+    border: 1px groove #ddd !important;
+    padding: 0 5px 5px 5px !important;
+    margin: 5px !important;
+  }
+
+  legend.fieldset {
+    font-size: 90% !important;
+    font-weight: normal !important;
+    text-align: left !important;
+    width:auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: none;
+  }
+
+  .tooltip-inner{
+    max-width: 350px;
+  }
+</style>
+
+
 <% if @vocabularies.present? %>
   <div class="card">
     <div class="card-body">
@@ -14,4 +41,61 @@
       <% end %>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-header">
+      参照箇所
+    </div>
+    <div class="card-body">
+      <table class="table table-condensed">
+        <% @bibles.each do |bible| %>
+          <% vocab_counts = VocabCount.where(bible_id: bible.id, lemma: @lemma) %>
+          <tr>
+            <td style="width:100px;"><%= bible.code %>(<%= vocab_counts.sum(:count) %>)</td>
+            <td>
+              <% vocab_counts.each do |vocab_count| %>
+                <% if bible.code == params[:module_code] && vocab_count.book_code == params[:book_code] %>
+                  <strong><%= vocab_count.book_code %>(<%= vocab_count.count %>)</strong>
+                <% else %>
+                  <%= link_to({controller: :dictionaries, action: :get, module_code: bible.code, book_code: vocab_count.book_code, lemma: @lemma}) do %>
+                    <%= vocab_count.book_code %>(<%= vocab_count.count %>)
+                  <% end %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+
+  <% if @passages.present? %>
+    <% @vocab_indices.each do |vocab_index| %>
+      <% passages = @passages[vocab_index.id] %>
+      <div class="card">
+        <div class="card-header" style="padding:4px 10px;">
+          <strong><%= vocab_index.chapter %>:<%= vocab_index.verse %></strong>&nbsp;
+        </div>
+        <div class="card-body" style="padding:5px;">
+          <div class="row row-0">
+            <% langs = passages.keys.length %>
+            <% col_class = 'col-md-' + (12/langs).to_s %>
+            <% passages.each do |lang, passages2| %>
+              <div class="<%= col_class %>">
+                <% passages2.each do |code, passage| %>
+                  <%= render 'bibles/passage', passage: passage[vocab_index.verse], lang: lang, name: @bible_names[code] if passage.present? %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <%= paginate @vocab_indices %>
+      </ul>
+    </nav>
+  <% end %>
 <% end %>

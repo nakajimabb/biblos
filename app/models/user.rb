@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
   has_many :group_users, :dependent => :destroy
   has_many :groups, :through => :group_users
+
+  def valid_used_bible_modules
+    Bible.where(code: ['OSHB', 'LXX', 'WHNU'])
+  end
 end

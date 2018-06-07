@@ -10,7 +10,26 @@ class DictionariesController < ApplicationController
         @bibles = Bible.where(id: bible_ids)
 
         respond_to do |format|
-          format.html { render :get }
+          format.html do
+            if params[:module_code].present? and params[:book_code].present?
+              select_bible = Bible.find_by(code: params[:module_code])
+              @vocab_count = VocabCount.find_by(bible_id: select_bible.id, book_code: params[:book_code], lemma: @lemma)
+              @vocab_indices = @vocab_count.vocab_indices.page(params[:page]) if @vocab_count.present?
+              used_bible_modules = current_user.valid_used_bible_modules
+              @bible_names = used_bible_modules.map { |bible| [bible.code, bible.name] }.to_h
+
+              @passages = {}
+              @vocab_indices.each do |vocab_index|
+                passages = used_bible_modules.map { |bible| [bible.lang, {}] }.to_h
+                used_bible_modules.each do |bible|
+                  passages[bible.lang][bible.code] ||= {}
+                  passages[bible.lang][bible.code] = bible.get_passages(params[:book_code], vocab_index.chapter, vocab_index.verse, vocab_index.verse)
+                end
+                @passages[vocab_index.id] = passages
+              end
+            end
+            render :get
+          end
           format.json do
             vocabulary = @vocabularies.first
             meaning = vocabulary.meaning
