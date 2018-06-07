@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2018_06_07_163539) do
     t.string "short_name"
     t.integer "lang", limit: 1
     t.integer "record_type", limit: 1, default: 1, null: false
+    t.text "remark"
     t.integer "rank"
     t.bigint "group_id"
     t.bigint "user_id"

@@ -15,4 +15,12 @@ class AudioBible < ApplicationRecord
       super().where(hidden: false, auth: :auth_public)
     end
   end
+
+  def file_abs_path(book_code, chapter)
+    Rails.root.to_s + '/public' + self.file_path(book_code, chapter)
+  end
+
+  def file_path(book_code, chapter)
+    '/audio/' + self.code + '/' + book_code.to_s + '/' + sprintf('%04d', chapter.to_i) + '.' + self.record_type.to_s
+  end
 end

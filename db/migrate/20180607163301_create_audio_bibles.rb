@@ -6,6 +6,7 @@ class CreateAudioBibles < ActiveRecord::Migration[5.2]
       t.string :short_name
       t.integer :lang, limit: 1
       t.integer :record_type, null: false, default: 1, limit: 1
+      t.text :remark
       t.integer :rank
       t.references :group, foreign_key: true
       t.references :user, foreign_key: true
