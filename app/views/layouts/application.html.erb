@@ -51,7 +51,9 @@
 
 -->
 
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden
+    <%= (cookies['sidebar-minimized'] == 'on') ? 'sidebar-minimized brand-minimized' : '' %>
+    <%= (cookies['sidebar-hidden'] == 'on') ? 'sidebar-hidden' : '' %>" >
   <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
       <span class="navbar-toggler-icon"></span>
@@ -120,6 +122,17 @@
 
     <script>
       <%= render 'layouts/app.js' %>
+
+      $(function () {
+        $('.navbar-toggler').click(function(){
+          var value = $("body").hasClass("sidebar-hidden") ? "on" : "off";
+          document.cookie = "sidebar-hidden=" + value + '; path=/';
+        });
+        $('.sidebar-minimizer').click(function(){
+          var value = $("body").hasClass("sidebar-minimized") ? "on" : "off";
+          document.cookie = "sidebar-minimized=" + value + '; path=/';
+        });
+      });
     </script>
   </div>
 </body>
