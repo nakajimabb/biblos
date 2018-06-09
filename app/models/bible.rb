@@ -5,7 +5,7 @@ class Bible < ApplicationRecord
   belongs_to :group, optional: true
   belongs_to :user, optional: true
   enum module_type: {sword: 1}
-  enum lang: {he: 1, grc: 2, ja: 3, en: 4, la: 5, ar: 6, fr: 7}
+  enum lang: Lang::LANG
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
 
   @@sword = {}

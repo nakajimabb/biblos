@@ -109,7 +109,7 @@
       <table class="table table-condensed">
         <% Lang::LANG.each do |lang, _| %>
           <tr>
-            <td style="width:60px;">
+            <td style="width:120px;">
               <label>
                 <%= check_box_tag 'selected_langs[]', lang, @used_langs.include?(lang.to_s) %> <%= lang %>
               </label>

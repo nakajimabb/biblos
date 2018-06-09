@@ -171,18 +171,20 @@
           <table class="table table-condensed">
             <tbody>
               <% @bibles.each do |lang, bibles| %>
-                <tr>
-                  <th><%= lang %></th>
-                  <td>
-                    <% bibles.each do |bible| %>
-                      <% id = "modules_#{bible.code}" %>
-                      <label for="<%= id %>">
-                        <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id %>
-                        <%= bible.name %>
-                      </label>
-                    <% end %>
-                  </td>
-                </tr>
+                <% if @used_langs.include?(lang) %>
+                  <tr>
+                    <th style="width:100px;"><%= t('enum.bible.lang.' + lang.to_s) %></th>
+                    <td>
+                      <% bibles.each do |bible| %>
+                        <% id = "modules_#{bible.code}" %>
+                        <label for="<%= id %>">
+                          <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id %>
+                          <%= bible.name %>
+                        </label>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
               <% end %>
             </tbody>
           </table>

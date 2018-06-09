@@ -8,6 +8,7 @@ class BiblesController < ApplicationController
       if params[:modules].blank?
         params[:modules] = current_user.valid_used_bibles.map { |used_bible| used_bible.bible.code }
       end
+      @used_langs = current_user.valid_used_langs.map { |used_lang| used_lang.lang }
 
       ot_books = Canon::BOOKS[:ot].map { |book| [book[0], book[1]] }
       nt_books = Canon::BOOKS[:nt].map { |book| [book[0], book[1]] }

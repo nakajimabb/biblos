@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :used_langs, :dependent => :destroy
   has_many :used_bibles, :dependent => :destroy
 
-  enum lang: {ja: 4, en: 5}
+  enum lang: Lang::LANG
   enum sex: {male: 1, female: 2}
 
   validates :nickname, presence: true

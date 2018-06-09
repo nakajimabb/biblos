@@ -1,0 +1,18 @@
+ja:
+  activerecord:
+    attributes:
+      bible:
+        code: 'コード'
+        lang: '言語'
+        name: '名称'
+        short_name: '略称'
+  enum:
+    bible:
+      lang:
+        he: 'ヘブル語'
+        grc: 'ギリシャ語'
+        la: 'ラテン語'
+        ja: '日本語'
+        en: '英語'
+        ar: 'アラビア語'
+        fr: 'フランス語'

@@ -3,7 +3,7 @@ class AudioBible < ApplicationRecord
 
   enum book_code: Canon::ENUM_BOOK
   enum record_type: {mp3: 1, m4a: 2}
-  enum lang: {he: 1, grc: 2, ja: 3, en: 4, la: 5, ar: 6, fr: 7}
+  enum lang: Lang::LANG
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
 
   def self.accessible(user_id=nil)
