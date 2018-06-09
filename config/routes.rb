@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, module: :users
   root 'bibles#index'
 
+  get 'bibles/size_info'
   get 'bibles/import_sword'
   post 'bibles/import_sword_exec', to: 'bibles#import_sword_exec'
   get 'bibles/sword'

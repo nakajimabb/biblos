@@ -65,6 +65,26 @@
     return msg;
   }
 
+  function update_chapter_verse() {
+    var book_code = $('#book_code').val();
+    var chapter   = $('#chapter').val();
+    var text1 = '', text2 = '';
+
+    var req = "/bibles/size_info?book_code=" + book_code;
+    if(chapter) req += "&chapter=" + chapter;
+
+    $.ajax(req, {
+      async: false,
+      success: function(data){
+        if(data["max_chapter"]) text1 = " 1~" + data["max_chapter"];
+        if(data["max_verse"])   text2 = " 1~" + data["max_verse"];
+      }
+    });
+    $('#chapter').attr('placeholder', '' + text1);
+    $('#verse1').attr('placeholder',  '節' + text2);
+    $('#verse2').attr('placeholder',  '節' + text2);
+  }
+
   var timer_id = null;
   var stop_time = 0;
   var audio;
@@ -92,6 +112,8 @@
       html: true,
       container: 'body'
     });
+    $('#book_code,#chapter').change(update_chapter_verse);
+    update_chapter_verse();
 
     $(".play_audio").click(function(){
       var audio_code = $(this).data('audio_code');
@@ -129,10 +151,10 @@
   <div class="card-body">
     <%= form_tag({controller: :bibles, action: :index}, {method: :get}) do %>
       <div class="form-inline">
-        <%= select_tag :book, options_for_select(@books, params[:book]), include_blank: false, class: 'form-control select2'  %>
-        <%= number_field_tag :chapter, params[:chapter], placeholder: '章', class: 'form-control' %>
-        <%= number_field_tag :verse1, params[:verse1], placeholder: '節', class: 'form-control' %>
-        <%= number_field_tag :verse2, params[:verse2], placeholder: '節', class: 'form-control', style: 'margin-right:10px;' %>
+        <%= select_tag :book_code, options_for_select(@books, params[:book_code]), include_blank: false, class: 'form-control select2'  %>
+        <%= number_field_tag :chapter, params[:chapter], placeholder: '章', class: 'form-control', style: 'padding:5px;' %>
+        <%= number_field_tag :verse1, params[:verse1], placeholder: '節', class: 'form-control', style: 'padding:5px;' %>
+        <%= number_field_tag :verse2, params[:verse2], placeholder: '節', class: 'form-control', style: 'margin-right:10px;padding:5px;' %>
 
         <a role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-translations"
            class="btn btn-secondary ml-sm-2" href="#collapse-translations">翻訳
@@ -171,7 +193,7 @@
         <div class="well" style="padding:5px;margin-top: 10px;">
           <% if @audio_bibles.present? %>
             <% @audio_bibles.each do |audio_bible| %>
-              <audio src=<%= audio_bible.file_path(params[:book], params[:chapter].to_i) %> id="<%= 'audio_' + audio_bible.code %>" controls
+              <audio src=<%= audio_bible.file_path(params[:book_code], params[:chapter].to_i) %> id="<%= 'audio_' + audio_bible.code %>" controls
                      style="width:100%;"></audio>
             <% end %>
           <% end %>
@@ -188,7 +210,7 @@
       <div class="card-header" style="padding:4px 10px;">
         <strong><%= @chapter %>:<%= verse %></strong>&nbsp;
         <% if @audio_bibles.present? %>
-          <% audio_segments = AudioSegment.all(current_user.id).where(book_code: params[:book], chapter: params[:chapter], verse: verse) %>
+          <% audio_segments = AudioSegment.all(current_user.id).where(book_code: params[:book_code], chapter: params[:chapter], verse: verse) %>
           <% audio_segments.each do |audio_segment| %>
             <% audio_bible = audio_segment.audio_bible %>
             <div style="display: inline-block;margin: 2px 15px 0 10px;height: 24px;">

@@ -10,6 +10,8 @@ class Bible < ApplicationRecord
 
   @@sword = {}
 
+  BIBLE_SIZE = (Canon::BOOKS[:ot].map { |book| [book[1], book[3]] }.to_h).merge(Canon::BOOKS[:nt].map { |book| [book[1], book[3]] }.to_h)
+
   Word = Struct.new(:text, :lemma, :morph) do
     def lemma_code
       /([G,H])(\d+)/.match(self.lemma) ? $1 + $2.to_i.to_s : ''

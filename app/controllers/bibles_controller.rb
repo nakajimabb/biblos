@@ -16,7 +16,7 @@ class BiblesController < ApplicationController
         @bibles[bible.lang] << bible
       end
 
-      if params[:book].present? and params[:chapter].present? and params[:verse1].present? and params[:verse2].present? and params[:modules].present?
+      if params[:book_code].present? and params[:chapter].present? and params[:verse1].present? and params[:verse2].present? and params[:modules].present?
         @passages = {}
         @chapter = params[:chapter].to_i
         @verse1 = params[:verse1].to_i
@@ -24,17 +24,28 @@ class BiblesController < ApplicationController
         @select_modules = {}
         Bible.all(current_user.id).where(code: params[:modules]).each do |bible|
           @select_modules[bible.code] = bible
-          passages = bible.get_passages(params[:book], @chapter, @verse1, @verse2)
+          passages = bible.get_passages(params[:book_code], @chapter, @verse1, @verse2)
           if passages.present?
             @passages[bible.lang] ||= {}
             @passages[bible.lang][bible.code] = passages
           end
         end
-        @audio_bibles = AudioBible.all(current_user.id).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book], params[:chapter].to_i)) }
+        @audio_bibles = AudioBible.all(current_user.id).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book_code], params[:chapter].to_i)) }
       end
     rescue => e
       flash[:alert] = e.message
     end
+  end
+
+  def size_info
+    result = {}
+    if params[:book_code].present?
+      result[:max_chapter] = Bible::BIBLE_SIZE[params[:book_code]].try(:length)
+      if params[:chapter].present?
+        result[:max_verse] = Bible::BIBLE_SIZE[params[:book_code]][params[:chapter].to_i - 1]
+      end
+    end
+    render json: result.to_json
   end
 
   def sword
