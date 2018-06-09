@@ -65,6 +65,21 @@
     return msg;
   }
 
+  var timer_id = null;
+  var stop_time = 0;
+  var audio;
+
+  function stop_audio(target) {
+    audio = document.getElementById(target);
+    if(audio && audio.currentTime > stop_time)    audio.pause();
+    else                                          timer_id = setTimeout(stop_audio, 50, target);
+  }
+
+  function play(target) {
+    audio = document.getElementById(target);
+    if(audio) audio.play();
+  }
+
   $(function () {
     $('.select2').select2({theme: "bootstrap"});
     $('[data-toggle="tooltip_lemma"]').tooltip({
@@ -76,6 +91,32 @@
       title: hover_morph,
       html: true,
       container: 'body'
+    });
+
+    $(".play_audio").click(function(){
+      var audio_code = $(this).data('audio_code');
+      if(audio) audio.pause();
+      audio = document.getElementById(audio_code);
+      if(audio) {
+        audio.currentTime = $(this).data('start_time');
+        audio.play();
+        if(timer_id) {
+          clearInterval(timer_id);
+          timer_id = null;
+        }
+        var t = parseFloat($(this).data('stop_time'));
+        if(t > 0) {
+          stop_time = t;
+          timer_id = setTimeout(stop_audio, 50, audio_code);
+        }
+      }
+      return false;
+    });
+    $(".pause_audio").click(function(){
+      var audio_code = $(this).data('audio_code');
+      audio = document.getElementById(audio_code);
+      if(audio) audio.pause();
+      return false;
     });
   });
 </script>
@@ -128,17 +169,10 @@
 
       <div class="collapse" id="collapse-audio">
         <div class="well" style="padding:5px;margin-top: 10px;">
-          <% AudioBible.all(current_user.id).each do |audio_bible| %>
-            <% if File.exist?(audio_bible.file_abs_path(params[:book], params[:chapter].to_i)) %>
-              <div class="clearfix">
-                <div style="width:60px;display:inline-block;">
-                  <label class="label label-warning pull-left remark" style="font-size: 100%;vertical-align: middle;margin: 5px;" data-toggle="tooltip" data-placement="top" title="<%= audio_bible.remark %>">
-                    <%= audio_bible.code %>
-                    </span>
-                  </label>
-                </div>
-                <audio src=<%= audio_bible.file_path(params[:book], params[:chapter].to_i) %> id="<%= 'audio_' + audio_bible.code %>" controls style="width:calc(100% - 70px);"></audio>
-              </div>
+          <% if @audio_bibles.present? %>
+            <% @audio_bibles.each do |audio_bible| %>
+              <audio src=<%= audio_bible.file_path(params[:book], params[:chapter].to_i) %> id="<%= 'audio_' + audio_bible.code %>" controls
+                     style="width:100%;"></audio>
             <% end %>
           <% end %>
         </div>
@@ -153,6 +187,26 @@
     <div class="card">
       <div class="card-header" style="padding:4px 10px;">
         <strong><%= @chapter %>:<%= verse %></strong>&nbsp;
+        <% if @audio_bibles.present? %>
+          <% audio_segments = AudioSegment.all(current_user.id).where(book_code: params[:book], chapter: params[:chapter], verse: verse) %>
+          <% audio_segments.each do |audio_segment| %>
+            <% audio_bible = audio_segment.audio_bible %>
+            <div style="display: inline-block;margin: 2px 15px 0 10px;height: 24px;">
+              <i class="fa fa-volume-up"></i>
+              <%= link_to '#',
+                          'data-audio_code': 'audio_' + audio_bible.code,
+                          'data-start_time': audio_segment.position,
+                          'data-stop_time': audio_segment.next_position,
+                          class: 'play_audio btn btn-xs btn-flat btn-default' do %>
+                <i class="fa fa-play"></i>
+              <% end %>
+              <%= link_to '#', 'data-audio_code': 'audio_' + audio_bible.code,
+                          class: 'pause_audio btn btn-xs btn-flat btn-default' do %>
+                <i class="fa fa-pause"></i>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
       </div>
       <div class="card-body" style="padding:5px;">
         <div class="row row-0">
