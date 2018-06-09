@@ -1,0 +1,20 @@
+ja:
+  enum:
+    user_prop:
+      key:
+        first_name: '名'
+        last_name: '氏'
+        first_name_kana: 'メイ'
+        last_name_kana: 'シ'
+        first_name_en: 'first name'
+        last_name_en: 'last name'
+        church: '教会・集会'
+        job: '職業'
+        work_place: '勤め先'
+        prefecture: '住所(都道府県)'
+        tel: '電話番号'
+        fax: 'FAX番号'
+      auth:
+        auth_user: '非公開'
+        auth_group: 'グループ公開'
+        auth_public: '公開'

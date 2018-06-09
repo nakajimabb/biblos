@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin20520720', as: 'rails_admin'
-  devise_for :users, module: :users
   root 'bibles#index'
+
+  get '/users/edit_profile'
+  patch '/users/update_profile', to: 'users#update_profile'
+  post '/users/update_used_bibles', to: 'users#update_used_bibles'
+  devise_for :users, module: :users
 
   get 'bibles/size_info'
   get 'bibles/import_sword'

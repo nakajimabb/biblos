@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_07_163539) do
+ActiveRecord::Schema.define(version: 2018_06_09_125030) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -148,6 +148,32 @@ ActiveRecord::Schema.define(version: 2018_06_07_163539) do
     t.index ["user_id"], name: "index_morphologies_on_user_id"
   end
 
+  create_table "used_bibles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "bible_id", null: false
+    t.index ["bible_id"], name: "index_used_bibles_on_bible_id"
+    t.index ["user_id", "bible_id"], name: "index_used_bibles_on_user_id_and_bible_id", unique: true
+    t.index ["user_id"], name: "index_used_bibles_on_user_id"
+  end
+
+  create_table "used_langs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "lang", limit: 1
+    t.index ["user_id", "lang"], name: "index_used_langs_on_user_id_and_lang", unique: true
+    t.index ["user_id"], name: "index_used_langs_on_user_id"
+  end
+
+  create_table "user_props", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "key", limit: 1, null: false
+    t.string "value"
+    t.integer "auth", limit: 1, default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "key"], name: "index_user_props_on_user_id_and_key", unique: true
+    t.index ["user_id"], name: "index_user_props_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -164,6 +190,12 @@ ActiveRecord::Schema.define(version: 2018_06_07_163539) do
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nickname", default: "", null: false
+    t.string "code"
+    t.integer "lang", limit: 1
+    t.integer "sex", limit: 1, default: 1, null: false
+    t.date "birthday"
+    t.index ["code"], name: "index_users_on_code", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -218,6 +250,10 @@ ActiveRecord::Schema.define(version: 2018_06_07_163539) do
   add_foreign_key "morph_codes", "morphologies"
   add_foreign_key "morphologies", "groups"
   add_foreign_key "morphologies", "users"
+  add_foreign_key "used_bibles", "bibles"
+  add_foreign_key "used_bibles", "users"
+  add_foreign_key "used_langs", "users"
+  add_foreign_key "user_props", "users"
   add_foreign_key "vocab_counts", "bibles"
   add_foreign_key "vocab_indices", "vocab_counts"
   add_foreign_key "vocabularies", "dictionaries"

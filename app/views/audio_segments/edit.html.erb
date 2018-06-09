@@ -34,7 +34,7 @@
                        class: 'form-control', style: 'width:200px;margin-right:10px;' %>
       </div>
       <div class="form-group">
-        <%= select_tag :audio_bible_id, options_from_collection_for_select(AudioBible.all(current_user.id), :id,
+        <%= select_tag :audio_bible_id, options_from_collection_for_select(AudioBible.accessible(current_user.id), :id,
                                                                            :name, params[:audio_bible_id]), class: 'form-control', style: 'width:200px;margin-right:10px;' %>
       </div>
       <div class="form-group">

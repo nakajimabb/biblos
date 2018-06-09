@@ -1,0 +1,132 @@
+<ul class="nav nav-tabs" role="tablist" style="width:640px;">
+  <li class="nav-item">
+    <a class="nav-link active show" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">プロフィール</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#used_bibles" role="tab" aria-controls="used_bibles">聖書選択</a>
+  </li>
+</ul>
+
+
+<div class="tab-content" style="width:640px;">
+  <div class="tab-pane active show" id="profile" role="tabpanel">
+    <h3 class="profile-username text-center"><%= @user.nickname %></h3>
+    <%= form_for(@user, url: {action: :update_profile}) do |f| %>
+      <table class="table table-condensed table-hover">
+        <tr>
+          <th><%= t('activerecord.attributes.user.email') %></th>
+          <td>非公開</td>
+          <td><%= f.email_field :email, disabled: true, class: 'form-control input-sm' %></td>
+        </tr>
+        <tr>
+          <th>氏名</th>
+          <td>
+            <% user_prop = UserProp.find_or_initialize_by(user_id: @user.id, key: :auth_name) %>
+            <%= f.fields_for :user_props, user_prop do |fu| %>
+              <%= fu.hidden_field :id %>
+              <%= fu.hidden_field :key %>
+              <%= fu.select :auth, options_for_select(UserProp.auth_options, user_prop.auth), {}, class: 'form-control input-sm' %>
+            <% end %>
+          </td>
+          <td>
+            <div class="row" style="margin-bottom: 5px;">
+              <% [:last_name, :first_name].each do |key| %>
+                <% user_prop = UserProp.find_or_initialize_by(user_id: @user.id, key: key) %>
+                <div class="col-md-6">
+                  <%= f.fields_for :user_props, user_prop do |fu| %>
+                    <%= fu.hidden_field :id %>
+                    <%= fu.hidden_field :key %>
+                    <%= fu.text_field :value, placeholder: t('enum.user_prop.key.' + key.to_s), class: 'form-control input-sm' %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+            <div class="row">
+              <% [:last_name_kana, :first_name_kana].each do |key| %>
+                <% user_prop = UserProp.find_or_initialize_by(user_id: @user.id, key: key) %>
+                <div class="col-md-6">
+                  <%= f.fields_for :user_props, user_prop do |fu| %>
+                    <%= fu.hidden_field :id %>
+                    <%= fu.hidden_field :key %>
+                    <%= fu.text_field :value, placeholder: t('enum.user_prop.key.' + key.to_s), class: 'form-control input-sm' %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><%= t('activerecord.attributes.user.nickname') %></th>
+          <td>公開</td>
+          <td><%= f.text_field :nickname, placeholder: t('activerecord.attributes.user.nickname'), class: 'form-control input-sm' %></td>
+        </tr>
+        <tr>
+          <th><%= t('activerecord.attributes.user.lang') %></th>
+          <td>公開</td>
+          <td><%= f.select :lang, options_for_select(User.lang_options, @user.lang), {include_blank: true}, class: 'form-control input-sm', style: 'width:50%;' %></td>
+        </tr>
+        <tr>
+          <th><%= t('activerecord.attributes.user.sex') %></th>
+          <td>非公開</td>
+          <td>
+            <label class="radio-inline">
+              <%= f.radio_button :sex, :male %><%= t('enum.user.sex.male') %>
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button :sex, :female %><%= t('enum.user.sex.female') %>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th><%= t('activerecord.attributes.user.password') %></th>
+          <td>非公開</td>
+          <td>
+            <%= f.password_field :password, placeholder: t('activerecord.attributes.user.password'), autocomplete: 'off', class: 'form-control input-sm',style: 'margin-bottom: 5px;' %>
+            <%= f.password_field :password_confirmation, placeholder: t('activerecord.attributes.user.password_confirmation'), autocomplete: 'off', class: 'form-control input-sm' %>
+          </td>
+        </tr>
+        <% [:church, :job, :prefecture].each do |key| %>
+          <tr>
+            <% user_prop = UserProp.find_or_initialize_by(user_id: @user.id, key: key) %>
+            <%= f.fields_for :user_props, user_prop do |fu| %>
+              <th>
+                <%= t "enum.user_prop.key.#{key}" %>
+                <%= fu.hidden_field :id %>
+                <%= fu.hidden_field :key %>
+              </th>
+              <td><%= fu.select :auth, options_for_select(UserProp.auth_options, user_prop.auth), {}, class: 'form-control input-sm' %></td>
+              <td><%= fu.text_field :value, class: 'form-control input-sm' %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </table>
+      <%= f.submit '保存する', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+
+  <div class="tab-pane" id="used_bibles" role="tabpanel">
+    <%= form_tag action: :update_used_bibles do %>
+      <table class="table table-condensed">
+        <% Lang::LANG.each do |lang, _| %>
+          <tr>
+            <td style="width:60px;">
+              <label>
+                <%= check_box_tag 'selected_langs[]', lang, @used_langs.include?(lang.to_s) %> <%= lang %>
+              </label>
+            </td>
+            <td>
+              <% @bibles.where(lang: lang).each do |bible| %>
+                <label style="font-weight: normal;margin-right: 5px;">
+                  <%= check_box_tag 'selected_bibles[]', bible.id, @used_bibles.include?(bible.id) %> <%= bible.name %>
+                </label>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+
+      <%= submit_tag '保存する', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
+

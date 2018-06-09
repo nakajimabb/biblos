@@ -3,9 +3,9 @@ class AudioSegment < ApplicationRecord
 
   enum book_code: Canon::ENUM_BOOK
 
-  def self.all(user_id=nil)
-    audio_bible_ids = AudioBible.all(user_id).pluck(:id)
-    super().joins(:audio_bible).where(audio_bibles: {id: audio_bible_ids})
+  def self.accessible(user_id=nil)
+    audio_bible_ids = AudioBible.accessible(user_id).pluck(:id)
+    all.joins(:audio_bible).where(audio_bibles: {id: audio_bible_ids})
   end
 
   def next_position

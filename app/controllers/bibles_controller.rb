@@ -5,13 +5,16 @@ class BiblesController < ApplicationController
       params[:verse1]   = 1 if params[:verse1].blank?
       params[:verse2]   = 1 if params[:verse2].blank?
       params[:verse2] = params[:verse1] if params[:verse2].to_i < params[:verse1].to_i
+      if params[:modules].blank?
+        params[:modules] = current_user.valid_used_bibles.map { |used_bible| used_bible.bible.code }
+      end
 
       ot_books = Canon::BOOKS[:ot].map { |book| [book[0], book[1]] }
       nt_books = Canon::BOOKS[:nt].map { |book| [book[0], book[1]] }
       @books = ot_books + nt_books
 
       @bibles = {}
-      Bible.all(current_user.id).each do |bible|
+      Bible.accessible(current_user.id).each do |bible|
         @bibles[bible.lang] ||= []
         @bibles[bible.lang] << bible
       end
@@ -22,7 +25,7 @@ class BiblesController < ApplicationController
         @verse1 = params[:verse1].to_i
         @verse2 = params[:verse2].to_i
         @select_modules = {}
-        Bible.all(current_user.id).where(code: params[:modules]).each do |bible|
+        Bible.accessible(current_user.id).where(code: params[:modules]).each do |bible|
           @select_modules[bible.code] = bible
           passages = bible.get_passages(params[:book_code], @chapter, @verse1, @verse2)
           if passages.present?
@@ -30,7 +33,7 @@ class BiblesController < ApplicationController
             @passages[bible.lang][bible.code] = passages
           end
         end
-        @audio_bibles = AudioBible.all(current_user.id).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book_code], params[:chapter].to_i)) }
+        @audio_bibles = AudioBible.accessible(current_user.id).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book_code], params[:chapter].to_i)) }
       end
     rescue => e
       flash[:alert] = e.message

@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        email: 'email'
+        nickname: 'ニックネーム'
+        code: 'ユーザID'
+        lang: '言語'
+        sex: '性別'
+        password: 'パスワード'
+        password_confirmation: 'パスワード(確認)'
+  enum:
+    user:
+      sex:
+        male: '男性'
+        female: '女性'
+      lang:
+        ja: '日本語'
+        en: '英語'
