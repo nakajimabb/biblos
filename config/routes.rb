@@ -23,4 +23,7 @@ Rails.application.routes.draw do
 
   get '/audio_segments/import'
   post '/audio_segments/load', to: 'audio_segments#load'
+  get '/audio_segments/edit'
+  post '/audio_segments/regist', to: 'audio_segments#regist'
+  resources :audio_segments, :only => [:destroy]
 end
