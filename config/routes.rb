@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'bibles/import_sword'
   post 'bibles/import_sword_exec', to: 'bibles#import_sword_exec'
   get 'bibles/sword'
+  get 'bibles/get_bibles'
   resources :bibles, :only => [:index]
 
   get 'dictionaries/get'

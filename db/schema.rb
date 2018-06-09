@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_09_125030) do
+ActiveRecord::Schema.define(version: 2018_06_09_183538) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(version: 2018_06_09_125030) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["audio_bible_id"], name: "index_audio_segments_on_audio_bible_id"
+  end
+
+  create_table "bible_books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "bible_id", null: false
+    t.integer "book_code", limit: 2, null: false
+    t.string "book_name"
+    t.index ["bible_id", "book_code"], name: "index_bible_books_on_bible_id_and_book_code", unique: true
+    t.index ["bible_id"], name: "index_bible_books_on_bible_id"
   end
 
   create_table "bibles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -240,6 +248,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_125030) do
   add_foreign_key "audio_bibles", "groups"
   add_foreign_key "audio_bibles", "users"
   add_foreign_key "audio_segments", "audio_bibles"
+  add_foreign_key "bible_books", "bibles"
   add_foreign_key "bibles", "groups"
   add_foreign_key "bibles", "users"
   add_foreign_key "dictionaries", "groups"

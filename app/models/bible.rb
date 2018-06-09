@@ -4,6 +4,8 @@ require 'sword'
 class Bible < ApplicationRecord
   belongs_to :group, optional: true
   belongs_to :user, optional: true
+  has_many :bible_books, :dependent => :destroy
+
   enum module_type: {sword: 1}
   enum lang: Lang::LANG
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
@@ -29,20 +31,22 @@ class Bible < ApplicationRecord
   end
 
   def get_passages(book_code, chapter, verse1, verse2)
-    sword = Bible.get_sword_module(self.code)
-    words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
-    result = {}
-    (verse1..verse2).each_with_index do |verse, i|
-      passage = words[i].map do |word|
-        text = word['Text'].try(:force_encoding, 'utf-8')
-        lemma = word['Lemma'].try(:force_encoding, 'utf-8')
-        morph = word['Morph'].try(:force_encoding, 'utf-8')
-        text.present? ? Word.new(text, lemma, morph) : nil
+    if bible_books.exists?(book_code: book_code)
+      sword = Bible.get_sword_module(self.code)
+      words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
+      result = {}
+      (verse1..verse2).each_with_index do |verse, i|
+        passage = words[i].map do |word|
+          text = word['Text'].try(:force_encoding, 'utf-8')
+          lemma = word['Lemma'].try(:force_encoding, 'utf-8')
+          morph = word['Morph'].try(:force_encoding, 'utf-8')
+          text.present? ? Word.new(text, lemma, morph) : nil
+        end
+        passage.compact!
+        result[verse] = passage if passage.present?
       end
-      passage.compact!
-      result[verse] = passage if passage.present?
+      result
     end
-    result
   end
 
   def self.load_sword_modules

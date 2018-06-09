@@ -65,6 +65,21 @@
     return msg;
   }
 
+  function update_bibles() {
+    var req = '/bibles/get_bibles?book_code=' + $('#book_code').val();
+    $.ajax(req, {
+      async: false,
+      success: function (data) {
+        $('.bible').each(function(){
+          var bible_code = $(this).val();
+          if(data.indexOf(bible_code) > 0) $(this).parent().show();
+          else                            $(this).parent().hide();
+        });
+      }
+    });
+    update_chapter_verse();
+  }
+
   function update_chapter_verse() {
     var book_code = $('#book_code').val();
     var chapter   = $('#chapter').val();
@@ -112,8 +127,9 @@
       html: true,
       container: 'body'
     });
-    $('#book_code,#chapter').change(update_chapter_verse);
-    update_chapter_verse();
+    $('#book_code').change(update_bibles);
+    $('#chapter').change(update_chapter_verse);
+    update_bibles();
 
     $(".play_audio").click(function(){
       var audio_code = $(this).data('audio_code');
@@ -178,7 +194,7 @@
                       <% bibles.each do |bible| %>
                         <% id = "modules_#{bible.code}" %>
                         <label for="<%= id %>">
-                          <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id %>
+                          <%= check_box_tag 'modules[]', bible.code, params[:modules].try(:include?, bible.code), id: id, class: 'bible' %>
                           <%= bible.name %>
                         </label>
                       <% end %>
