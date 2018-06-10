@@ -1,0 +1,66 @@
+<style>
+  .card-link:link { color: black; text-decoration:none; }
+  .card-link:visited { color: black; text-decoration:none; }
+  .card-link:active { color: black; text-decoration:none; }
+  .card-article:hover {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -o-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -ms-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    color: black;
+  }
+  .card-article {
+    height: 250px;
+  }
+  .card-header-article {
+    padding: 5px 10px;
+  }
+  .card-body-article {
+    overflow: hidden;
+    margin: 10px;
+    padding: 0px;
+  }
+</style>
+
+
+<% content_for :sub_menu do %>
+  <%= link_to new_article_path(parent_id: params[:parent_id], directory: true), class: 'btn' do %>
+    <i class="icon-folder-alt"></i>
+    カテゴリ追加
+  <% end %>
+  <%= link_to new_article_path(parent_id: params[:parent_id]), class: 'btn' do %>
+    <i class="icon-pencil"></i>
+    記事作成
+  <% end %>
+<% end %>
+
+
+<div class="animated fadeIn">
+  <div style="margin-bottom: 20px;">
+    <div class="list-group">
+      <% @articles.where(directory: true).each do |article| %>
+        <%= link_to article, class: 'list-group-item list-group-item-action disabled' do %>
+          <i class="icon-folder-alt"></i>&nbsp;<%= article.title %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <% @articles.where(directory: false).each do |article| %>
+    <div class="col-sm-6 col-lg-4 col-xl-3">
+      <%= link_to article, class: 'card-link' do %>
+        <div class="card card-article<% if article.directory? %> card-accent-secondary<% end %>">
+          <div class="card-header card-header-article">
+            <%= article.title %>
+          </div>
+          <div class="card-body card-body-article">
+            <%= article.remark %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-body">
+      <%= form_for(article, html: {class: 'height:calc(100vh - 180px);', style: 'height:calc(100vh - 180px);'}) do |f| %>
+        <%= f.hidden_field :directory %>
+        <%= f.hidden_field :parent_id %>
+        <div class="form-group" >
+          <%= f.text_field :title, class: 'form-control', style: 'width: calc(100% - 90px);display:inline;' %>
+          <button type="submit" class="btn btn-primary pull-right" style="width:80px;">保存する</button>
+        </div>
+        <%= f.text_area :remark, class: 'form-control', style: 'height: calc(100% - 40px);' %>
+      <% end %>
+      <% if article.persisted? %>
+        <%= link_to '削除する', article, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger mt-4 pull-right' %>
+    <% end %>
+    </div>
+  </div>
+</div>

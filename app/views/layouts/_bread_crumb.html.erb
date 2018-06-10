@@ -1,0 +1,12 @@
+<% if @bread_crumb.present? %>
+  <% @bread_crumb.each do |a| %>
+    <% menu = a[0]; action = a[1] %>
+    <li class="breadcrumb-item">
+      <% if action.present? %>
+        <%= link_to menu, action %>
+      <% else %>
+        <%= menu %>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

@@ -90,6 +90,11 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/articles/">
+              <i class="nav-icon fa fa-list"></i> 記事一覧
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/users/edit_profile">
               <i class="nav-icon icon-settings"></i> ユーザ設定
             </a>
@@ -102,8 +107,12 @@
     <!-- Main content -->
     <main class="main">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/"><i class="icon-home"></i> Home</a>
+        <%= render 'layouts/bread_crumb' %>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <%= yield :sub_menu %>
+          </div>
         </li>
       </ol>
 
