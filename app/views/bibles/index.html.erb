@@ -230,6 +230,7 @@
         <strong><%= @chapter %>:<%= verse %></strong>&nbsp;
         <% if @audio_bibles.present? %>
           <% audio_segments = AudioSegment.accessible(current_user.id).where(book_code: params[:book_code], chapter: params[:chapter], verse: verse) %>
+          <% audio_segments = audio_segments.joins(:audio_bible).order('audio_bibles.rank') %>
           <% audio_segments.each do |audio_segment| %>
             <% audio_bible = audio_segment.audio_bible %>
             <div style="display: inline-block;margin: 2px 15px 0 10px;height: 24px;">

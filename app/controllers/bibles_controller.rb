@@ -37,7 +37,7 @@ class BiblesController < ApplicationController
             @passages[bible.lang][bible.code] = passages
           end
         end
-        @audio_bibles = AudioBible.accessible(current_user.id).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book_code], params[:chapter].to_i)) }
+        @audio_bibles = AudioBible.accessible(current_user.id).order(:rank).select{ |audio_bible| File.exist?(audio_bible.file_abs_path(params[:book_code], params[:chapter].to_i)) }
       end
     rescue => e
       flash[:alert] = e.message

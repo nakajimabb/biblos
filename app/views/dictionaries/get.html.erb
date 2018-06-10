@@ -25,6 +25,62 @@
 </style>
 
 
+<script type="text/javascript" charset="utf-8">
+  function hover_lemma(){
+    var e = $(this);
+    var lemma = e.data('lemma');
+    var msg;
+
+    var req = "/dictionaries/get.json?lemma=" + lemma;
+    $.ajax(req, {
+      async: false,
+      success: function(data){
+        msg = "<p style=\"text-align: center;border-bottom: 1px solid #888;margin: 0;\">";
+        msg += "<span class=\"" + data["lang"] + "\">" + data["spell"] + "</span>";
+        msg += " (" + data["lemma"] + ")  -- " + data["transliteration"] + "</p>";
+        msg += '<div style="text-align: left;">';
+        msg += '<p>' + data["meaning"].replace(/\n/g, '<br>') + '</p>';
+        msg += '</div>';
+      }
+    });
+    return msg;
+  }
+
+  function hover_morph(){
+    var e = $(this);
+    var parsing = e.text();
+    var msg;
+
+    var req = "/morphologies/get.json?parsing=" + parsing;
+    $.ajax(req, {
+      async: false,
+      success: function(data){
+        msg = "<p style=\"text-align: center;border-bottom: 1px solid #888;margin: 0;\">";
+        msg += "<span>" + data["parsing"] + " (" + data["code"] + ")" + "</span>";
+        msg += '<div style="text-align: left;">';
+        msg += '<p>' + data["remark"].replace(/\n/g, '<br>') + '</p>';
+        msg += '</div>';
+      }
+    });
+    return msg;
+  }
+
+  $(function () {
+    $('.select2').select2({theme: "bootstrap"});
+    $('[data-toggle="tooltip_lemma"]').tooltip({
+      title: hover_lemma,
+      html: true,
+      container: 'body'
+    });
+    $('.morph').tooltip({
+      title: hover_morph,
+      html: true,
+      container: 'body'
+    });
+  });
+</script>
+
+
 <% if @vocabularies.present? %>
   <div class="card">
     <div class="card-body">
@@ -74,7 +130,9 @@
       <% passages = @passages[vocab_index.id] %>
       <div class="card">
         <div class="card-header" style="padding:4px 10px;">
-          <strong><%= vocab_index.chapter %>:<%= vocab_index.verse %></strong>&nbsp;
+          <%= link_to(bibles_path(book_code: params[:book_code], chapter: vocab_index.chapter, verse1: vocab_index.verse, verse2: vocab_index.verse), target: '_blank') do %>
+            <strong><%= vocab_index.chapter %>:<%= vocab_index.verse %></strong>&nbsp;
+          <% end %>
         </div>
         <div class="card-body" style="padding:5px;">
           <div class="row row-0">

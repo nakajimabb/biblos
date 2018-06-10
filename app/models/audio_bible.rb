@@ -1,4 +1,6 @@
 class AudioBible < ApplicationRecord
+  belongs_to :group, optional: true
+  belongs_to :user, optional: true
   has_many :audio_segments, :dependent => :destroy
 
   enum book_code: Canon::ENUM_BOOK

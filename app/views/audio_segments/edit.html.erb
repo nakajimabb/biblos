@@ -46,10 +46,10 @@
   </div>
 </div>
 
-<% if @audio_segments.present? %>
-  <div class="card">
-    <div class="card-header">朗読データ</div>
-    <div class="card-body">
+<div class="card">
+  <div class="card-header">朗読データ</div>
+  <div class="card-body">
+    <% if @audio_segments.present? %>
       <table class="table table-responsive-sm table-sm" style="width:300px;margin-top:20px;">
         <thead>
           <tr>
@@ -74,19 +74,19 @@
           <% end %>
         </tbody>
       </table>
+    <% end %>
 
-      <%= form_tag :action => :regist do %>
-        <%= hidden_field_tag :audio_bible_id, params[:audio_bible_id] %>
-        <%= hidden_field_tag :book_code, params[:book_code] %>
-        <%= hidden_field_tag :chapter, params[:chapter] %>
+    <%= form_tag :action => :regist do %>
+      <%= hidden_field_tag :audio_bible_id, params[:audio_bible_id] %>
+      <%= hidden_field_tag :book_code, params[:book_code] %>
+      <%= hidden_field_tag :chapter, params[:chapter] %>
 
-        <% if @audio_file.present? && File.exist?(@audio_file_path) %>
-          <%= hidden_field_tag :position, params[:position] %>
-          <audio src=<%= @audio_file %> controls style="width:100%;" id="book_audio" ></audio>
-          <%= submit_tag '時刻セット', id: :add_segment, name: :add_book_section, class: 'btn btn-primary', class: 'btn btn-primary' %>
-        <% end %>
+      <% if @audio_file.present? && File.exist?(@audio_file_path) %>
+        <%= hidden_field_tag :position, params[:position] %>
+        <audio src=<%= @audio_file %> controls style="width:100%;" id="book_audio" ></audio>
+        <%= submit_tag '時刻セット', id: :add_segment, name: :add_book_section, class: 'btn btn-primary', class: 'btn btn-primary' %>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 
