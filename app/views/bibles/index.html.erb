@@ -186,7 +186,8 @@
         <div class="well" style="padding:5px;margin-top:10px;">
           <table class="table table-condensed">
             <tbody>
-              <% @bibles.each do |lang, bibles| %>
+              <% @bibles.keys.sort_by{ |lang| Lang::LANG[lang.to_sym] }.each do |lang| %>
+                <% bibles = @bibles[lang] %>
                 <% if @used_langs.include?(lang) %>
                   <tr>
                     <th style="width:100px;"><%= t('enum.bible.lang.' + lang.to_s) %></th>
@@ -252,7 +253,8 @@
         <div class="row row-0">
           <% langs = @passages.keys.length %>
           <% col_class = 'col-md-' + (12/langs).to_s %>
-          <% @passages.each do |lang, passages| %>
+          <% @passages.keys.sort_by{ |lang| Lang::LANG[lang.to_sym] }.each do |lang| %>
+            <% passages = @passages[lang] %>
             <div class="<%= col_class %>">
               <% passages.each do |code, passage| %>
                 <%= render 'passage', passage: passage[verse], lang: lang, name: @select_modules[code].name %>

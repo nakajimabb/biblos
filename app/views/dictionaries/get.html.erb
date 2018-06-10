@@ -80,7 +80,8 @@
           <div class="row row-0">
             <% langs = passages.keys.length %>
             <% col_class = 'col-md-' + (12/langs).to_s %>
-            <% passages.each do |lang, passages2| %>
+            <% passages.keys.sort_by{ |lang| Lang::LANG[lang.to_sym] }.each do |lang| %>
+              <% passages2 = passages[lang] %>
               <div class="<%= col_class %>">
                 <% passages2.each do |code, passage| %>
                   <%= render 'bibles/passage', passage: passage[vocab_index.verse], lang: lang, name: @bible_names[code] if passage.present? %>

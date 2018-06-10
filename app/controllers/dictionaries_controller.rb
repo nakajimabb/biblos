@@ -20,10 +20,13 @@ class DictionariesController < ApplicationController
 
               @passages = {}
               @vocab_indices.each do |vocab_index|
-                passages = used_bibles.map { |bible| [bible.lang, {}] }.to_h
+                passages = {}
                 used_bibles.each do |bible|
-                  passages[bible.lang][bible.code] ||= {}
-                  passages[bible.lang][bible.code] = bible.get_passages(params[:book_code], vocab_index.chapter, vocab_index.verse, vocab_index.verse)
+                  passages2 = bible.get_passages(params[:book_code], vocab_index.chapter, vocab_index.verse, vocab_index.verse)
+                  if passages2.present?
+                    passages[bible.lang] ||= {}
+                    passages[bible.lang][bible.code] = passages2
+                  end
                 end
                 @passages[vocab_index.id] = passages
               end
