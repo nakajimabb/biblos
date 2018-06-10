@@ -258,7 +258,7 @@
             <div class="<%= col_class %>">
               <% passages.each do |code, passage| %>
                 <% if passage[verse].present? %>
-                  <%= render 'passage', passage: passage[verse], lang: lang, name: @select_modules[code].name %>
+                  <%= render 'passage', passage: passage[verse], lang: lang, name: @select_modules[code].name, select_lemma: nil %>
                 <% end %>
               <% end %>
             </div>

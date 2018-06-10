@@ -8,7 +8,8 @@
           <% if word.lemma.present? %>
             <br>
             <span class="lemma" data-placement="bottom" data-toggle="tooltip_lemma" data-lemma="<%= word.lemma %>" >
-              <%= link_to word.lemma, {controller: :dictionaries, action: :get, lemma: word.lemma}, target: '_blank' %>
+              <% color = equal_lemma?(select_lemma, word.lemma) ? 'color:red;' : '' if select_lemma.present? %>
+              <%= link_to word.lemma, {controller: :dictionaries, action: :get, lemma: word.lemma}, target: '_blank', style: color %>
             </span>
           <% end %>
           <% if word.morph.present? %>

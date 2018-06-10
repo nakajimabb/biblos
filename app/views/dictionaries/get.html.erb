@@ -85,7 +85,7 @@
               <div class="<%= col_class %>">
                 <% passages2.each do |code, passage| %>
                   <% if passage[vocab_index.verse].present? %>
-                    <%= render 'bibles/passage', passage: passage[vocab_index.verse], lang: lang, name: @bible_names[code] if passage.present? %>
+                    <%= render 'bibles/passage', passage: passage[vocab_index.verse], lang: lang, name: @bible_names[code], select_lemma: @lemma %>
                   <% end %>
                 <% end %>
               </div>
