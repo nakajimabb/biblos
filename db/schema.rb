@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_201600) do
     t.bigint "parent_id"
     t.boolean "directory", default: false, null: false
     t.string "title", null: false
-    t.string "headline"
+    t.string "headline", limit: 512
     t.text "remark"
     t.integer "auth", limit: 1, default: 1, null: false
     t.boolean "permit_comment", default: true, null: false

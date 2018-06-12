@@ -21,6 +21,7 @@
     margin: 10px;
     padding: 0px;
   }
+  p { margin-bottom: 0; }
 </style>
 
 
@@ -37,15 +38,30 @@
 
 
 <div class="animated fadeIn">
-  <div style="margin-bottom: 20px;">
-    <div class="list-group">
-      <% @articles.where(directory: true).each do |article| %>
-        <%= link_to article, class: 'list-group-item list-group-item-action disabled' do %>
-          <i class="icon-folder-alt"></i>&nbsp;<%= article.title %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
+  <table class="table table-responsive-sm bg-white">
+    <colgroup>
+      <col width="calc(100% - 40px)">
+      <col width="40px">
+    </colgroup>
+    <tbody>
+    <% @articles.where(directory: true).each do |article| %>
+      <tr>
+        <td>
+          <%= link_to article do %>
+            <div style="width:100%;height:100%;">
+              <i class="icon-folder-alt"></i>&nbsp;<%= article.title %>
+            </div>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to edit_article_path(article) do %>
+            <i class="fa fa-edit fa-lg"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 
   <div class="row">
     <% @articles.where(directory: false).each do |article| %>
@@ -56,7 +72,7 @@
             <%= article.title %>
           </div>
           <div class="card-body card-body-article">
-            <%= article.remark %>
+            <%= simple_format(article.headline + '...') %>
           </div>
         </div>
       <% end %>

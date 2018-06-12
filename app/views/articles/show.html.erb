@@ -1,3 +1,8 @@
+<style>
+p { margin-bottom: 0; }
+</style>
+
+
 <div class="animated fadeIn">
   <div class="card">
     <div class="card-header">
@@ -11,7 +16,7 @@
       <% end %>
     </div>
     <div class="card-body">
-      <%= simple_format(@article.remark) %>
+      <%= raw(@article.remark) %>
     </div>
   </div>
 </div>

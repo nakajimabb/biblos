@@ -6,7 +6,7 @@ class CreateArticles < ActiveRecord::Migration[5.2]
       t.references :parent
       t.boolean :directory, null: false, default: false
       t.string :title, null: false
-      t.string :headline
+      t.string :headline, limit: 512
       t.text :remark
       t.integer :auth, null: false, limit: 1, default: 1
       t.boolean :permit_comment, null: false, default: true

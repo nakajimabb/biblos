@@ -8,6 +8,8 @@ class Article < ApplicationRecord
 
   validates :title, presence: true
 
+  HEADLINE_BYTESIZE = 512
+
   def self.accessible(user_id=nil)
     if user_id.present?
       group_ids = GroupUser.where(user_id: user_id).pluck(:group_id)
