@@ -4,6 +4,7 @@ class UsersController < ApplicationController
     @bibles = Bible.accessible(current_user.id)
     @used_bibles = current_user.valid_used_bibles.pluck(:bible_id)
     @used_langs = current_user.valid_used_langs.pluck(:lang)
+    @bread_crumb = [['ユーザ設定', users_edit_profile_path]]
   end
 
   def update_profile

@@ -22,6 +22,7 @@ class BiblesController < ApplicationController
         @bibles[bible.lang] ||= []
         @bibles[bible.lang] << bible
       end
+      @bread_crumb = [['聖書メニュー', nil], ['聖書閲覧', bibles_path]]
 
       if params[:book_code].present? and params[:chapter].present? and params[:verse1].present? and params[:verse2].present? and params[:modules].present?
         @passages = {}
@@ -57,6 +58,7 @@ class BiblesController < ApplicationController
 
   def sword
     @modules = Bible.load_sword_modules
+    @bread_crumb = [['聖書メニュー', nil], ['モジュール一覧', bibles_sword_path]]
   end
 
   def get_bibles

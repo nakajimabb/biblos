@@ -31,6 +31,7 @@ class DictionariesController < ApplicationController
                 @passages[vocab_index.id] = passages
               end
             end
+            @bread_crumb = [['聖書メニュー', nil], ['聖書語彙', dictionaries_get_path(lemma: params[:lemma])]]
             render :get
           end
           format.json do
