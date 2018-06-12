@@ -47,9 +47,9 @@
     <% @articles.where(directory: true).each do |article| %>
       <tr>
         <td>
-          <%= link_to article do %>
+          <%= link_to article, style: 'text-decoration:none;' do %>
             <div style="width:100%;height:100%;">
-              <i class="icon-folder-alt"></i>&nbsp;<%= article.title %>
+              <i class="icon-folder-alt"></i>&nbsp;<%= article.title %><small style="margin-left: 20px;"><%= truncate(article.headline, length: 50) %></small>
             </div>
           <% end %>
         </td>
