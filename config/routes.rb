@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin20520720', as: 'rails_admin'
-  root 'bibles#index'
+  root 'users#home'
 
+  get '/users/home'
   get '/users/edit_profile'
   patch '/users/update_profile', to: 'users#update_profile'
   post '/users/update_used_bibles', to: 'users#update_used_bibles'
   devise_for :users, module: :users
+  resources :users, :only => [:index, :show]
+
+  get '/groups/:id/members', to: 'groups#members'
+  resources :groups, :only => [:index, :show]
 
   get 'bibles/size_info'
   get 'bibles/import_sword'
@@ -33,5 +38,13 @@ Rails.application.routes.draw do
   post '/audio_segments/regist', to: 'audio_segments#regist'
   resources :audio_segments, :only => [:destroy]
 
+  resources :users do
+    resources :articles, :only => [:index, :show]
+  end
+  resources :groups do
+    resources :articles, :only => [:index, :show]
+  end
   resources :articles
+
+  get '/:group_code', to: 'groups#detail'
 end

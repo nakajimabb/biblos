@@ -1,0 +1,27 @@
+<ul class="nav">
+  <li class="nav-title pl-lg-4"><%= @target_group.name %></li>
+  <li class="nav-item">
+    <%= link_to @target_group, class: 'nav-link' do %>
+      <i class="nav-icon icon-home"></i> トップ
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to({controller: :groups, action: :members, id: @target_group.id}, class: 'nav-link') do %>
+      <i class="nav-icon icon-people"></i> メンバー
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to group_articles_path(group_id: @target_group.id), class: 'nav-link' do %>
+      <i class="nav-icon fa fa-list"></i> 記事一覧
+    <% end %>
+  </li>
+  <% @target_group.article_groups.where(menu_type: :side_menu).each do |article_group| %>
+    <% article = article_group.article %>
+    <li class="nav-item">
+      <%= link_to group_article_path(article, group_id: @target_group.id), class: 'nav-link' do %>
+        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <i class="<%= css_class %>"></i> <%= article.title %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

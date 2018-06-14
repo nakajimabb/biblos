@@ -60,7 +60,7 @@
           <%= raw(article.remark) %>
         </div>
       <% end %>
-      <% if article.persisted? %>
+      <% if article.user_id == current_user.id and article.persisted?%>
         <%= link_to '削除する', article, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger mt-4 pull-right' %>
     <% end %>
     </div>

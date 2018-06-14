@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_09_201600) do
+ActiveRecord::Schema.define(version: 2018_06_13_123712) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,30 @@ ActiveRecord::Schema.define(version: 2018_06_09_201600) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "article_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "article_id"
+    t.bigint "group_id"
+    t.integer "rank"
+    t.integer "menu_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id", "group_id", "menu_type"], name: "index_article_groups_on_article_id_and_group_id_and_menu_type", unique: true
+    t.index ["article_id"], name: "index_article_groups_on_article_id"
+    t.index ["group_id"], name: "index_article_groups_on_group_id"
+  end
+
+  create_table "article_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "article_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "menu_type", limit: 1, default: 1, null: false
+    t.integer "rank"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id", "user_id", "menu_type"], name: "index_article_users_on_article_id_and_user_id_and_menu_type", unique: true
+    t.index ["article_id"], name: "index_article_users_on_article_id"
+    t.index ["user_id"], name: "index_article_users_on_user_id"
   end
 
   create_table "articles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -262,6 +286,10 @@ ActiveRecord::Schema.define(version: 2018_06_09_201600) do
     t.index ["dictionary_id"], name: "index_vocabularies_on_dictionary_id"
   end
 
+  add_foreign_key "article_groups", "articles"
+  add_foreign_key "article_groups", "groups"
+  add_foreign_key "article_users", "articles"
+  add_foreign_key "article_users", "users"
   add_foreign_key "articles", "articles", column: "parent_id"
   add_foreign_key "articles", "groups"
   add_foreign_key "articles", "users"

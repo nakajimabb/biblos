@@ -1,0 +1,49 @@
+<ul class="nav">
+  <li class="nav-item">
+    <a class="nav-link" href="/users/home">
+      <i class="nav-icon icon-home"></i> ホーム
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/articles/">
+      <i class="nav-icon fa fa-list"></i> 記事一覧
+    </a>
+  </li>
+  <% current_user.article_users.where(menu_type: :side_menu).each do |article_user| %>
+    <% article = article_user.article %>
+    <li class="nav-item">
+      <%= link_to article, class: 'nav-link' do %>
+        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <i class="<%= css_class %>"></i> <%= article.title %>
+      <% end %>
+    </li>
+  <% end %>
+  <% current_user.groups.where(group_type: :community).each do |group| %>
+    <li class="nav-item">
+      <%= link_to group, class: 'nav-link' do %>
+        <i class="nav-icon icon-people"></i> <%= group.name %>
+      <% end %>
+    </li>
+  <% end %>
+  <li class="nav-item">
+    <a class="nav-link" href="/groups/">
+      <i class="nav-icon icon-people"></i> グループ一覧
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/users/edit_profile">
+      <i class="nav-icon icon-settings"></i> 各種設定
+    </a>
+  </li>
+  <li class="nav-item nav-dropdown">
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-star"></i>聖書メニュー</a>
+    <ul class="nav-dropdown-items">
+      <li class="nav-item">
+        <a class="nav-link pl-4" href="/bibles"><i class="fa fa-book"></i>聖書閲覧</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link pl-4" href="/bibles/sword"><i class="icon-menu"></i>モジュール一覧</a>
+      </li>
+    </ul>
+  </li>
+</ul>

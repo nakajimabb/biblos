@@ -1,0 +1,13 @@
+<div class="animated fadeIn">
+  <% @group.article_groups.where(menu_type: :top_page).each do |article_group| %>
+    <% article = article_group.article %>
+    <div class="card">
+      <div class="card-header">
+        <%= article.title %>
+      </div>
+      <div class="card-body">
+        <%= raw(article.remark) %>
+      </div>
+    </div>
+  <% end %>
+</div>

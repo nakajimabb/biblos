@@ -1,16 +1,20 @@
 class ArticlesController < ApplicationController
+  before_action :set_target_user, only: [:index, :show]
+  before_action :set_target_group, only: [:index, :show]
+
   def index
-    @parent = Article.find_by_id(params[:parent_id])
-    @articles = Article.accessible(current_user.id).where(parent_id: @parent.try(:id))
-    @bread_crumb = get_bread_curmb(@parent)
+    @articles = Article.accessible(current_user.id).where(parent_id: nil)
+    @bread_crumb = get_bread_curmb(@parent, @target_group, @target_user)
   end
 
   def show
     @article = Article.accessible(current_user.id).find(params[:id])
+    @bread_crumb = get_bread_curmb(@article, @target_group, @target_user)
     if @article.directory?
-      redirect_to articles_path(parent_id: @article.id)
+      @parent = @article
+      @articles = Article.accessible(current_user.id).where(parent_id: @parent.try(:id))
+      render 'index'
     end
-    @bread_crumb = get_bread_curmb(@article.parent)
   end
 
   def new
@@ -46,6 +50,7 @@ class ArticlesController < ApplicationController
   def update
     @article = Article.find(params[:id])
     begin
+      raise 'not permitted' if @article.user_id != current_user.id
       Article.transaction do
         p = article_params
         p[:headline] = get_headline(p[:remark])
@@ -62,11 +67,24 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article = Article.find(params[:id])
-    @article.destroy
-    redirect_to articles_path(parent_id: @article.parent_id), notice: '記事を削除しました。'
+    begin
+      raise 'not permitted' if @article.user_id != current_user.id
+      @article.destroy
+      redirect_to article_path(@article.parent), notice: '記事を削除しました。'
+    rescue => e
+      redirect_to article_path(parent_id: @article.parent), alert: e.message
+    end
   end
 
 private
+
+  def set_target_user
+    @target_user = User.find_by_id(params[:user_id])
+  end
+
+  def set_target_group
+    @target_group = Group.find_by_id(params[:group_id])
+  end
 
   def get_headline(remark)
     headline = helpers.sanitize(remark, :tags => %w(p br)).gsub('<br>', "<br>\n").gsub('</p>', "</p>\n")
@@ -81,14 +99,20 @@ private
     result
   end
 
-  def get_bread_curmb(parent)
-    bread_crumb = [['記事一覧', articles_path]]
-    if parent.present?
-      parents = parent.parents
-      parents << parent
-      parents.each do |article|
-        bread_crumb << [article.title, articles_path(parent_id: article.id)]
+  def get_bread_curmb(article, target_group=nil, target_user=nil)
+    bread_crumb = []
+    if target_group.present?
+      bread_crumb << [target_group.name, nil]
+    elsif target_user.present?
+      bread_crumb << [target_user.nickname, nil]
+    end
+    bread_crumb << ['記事一覧', helpers.target_articles_path(target_group, target_user)]
+    if article.present?
+      parents = article.parents
+      parents.each do |article2|
+        bread_crumb << [article2.title, helpers.target_article_path(article2, target_group, target_user)]
       end
+      bread_crumb << [article.title, article.directory? ? article : nil]
     end
     bread_crumb
   end

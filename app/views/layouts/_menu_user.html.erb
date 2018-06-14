@@ -1,0 +1,22 @@
+<ul class="nav">
+  <li class="nav-title pl-lg-4"><%= @target_user.nickname %> <small>さん</small></li>
+  <li class="nav-item">
+    <%= link_to @target_user, class: 'nav-link' do %>
+      <i class="nav-icon icon-home"></i> トップ
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to user_articles_path(user_id: @target_user.id), class: 'nav-link' do %>
+      <i class="nav-icon fa fa-list"></i> 記事一覧
+    <% end %>
+  </li>
+  <% @target_user.article_users.where(menu_type: :side_menu).each do |article_user| %>
+    <% article = article_user.article %>
+    <li class="nav-item">
+      <%= link_to user_article_path(article, user_id: @target_user.id), class: 'nav-link' do %>
+        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <i class="<%= css_class %>"></i> <%= article.title %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

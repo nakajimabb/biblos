@@ -58,13 +58,16 @@
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#"></a>
+    <a class="navbar-brand" href="/"></a>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
       <span class="navbar-toggler-icon"></span>
     </button>
     <ul class="nav navbar-nav d-md-down-none mr-auto">
       <li class="nav-item px-3">
         <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item px-3">
+        <a class="nav-link" href="/bibles/">Bible</a>
       </li>
     </ul>
     <ul class="nav navbar-nav ml-auto">
@@ -77,29 +80,13 @@
     <div class="sidebar">
       <nav class="sidebar-nav">
 
-        <ul class="nav">
-          <li class="nav-item nav-dropdown">
-            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-star"></i>聖書メニュー</a>
-            <ul class="nav-dropdown-items">
-              <li class="nav-item">
-                <a class="nav-link pl-4" href="/bibles"><i class="fa fa-book"></i>聖書閲覧</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link pl-4" href="/bibles/sword"><i class="icon-menu"></i>モジュール一覧</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/articles/">
-              <i class="nav-icon fa fa-list"></i> 記事一覧
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/edit_profile">
-              <i class="nav-icon icon-settings"></i> ユーザ設定
-            </a>
-          </li>
-        </ul>
+        <% if @target_group %>
+          <%= render 'layouts/menu_group' %>
+        <% elsif @target_user.present? %>
+          <%= render 'layouts/menu_user' %>
+        <% else %>
+          <%= render 'layouts/menu_default' %>
+        <% end %>
 
       </nav>
       <button class="sidebar-minimizer brand-minimizer" type="button"></button>

@@ -10,6 +10,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :user_props, allow_destroy: true
   has_many :used_langs, :dependent => :destroy
   has_many :used_bibles, :dependent => :destroy
+  has_many :articles, :dependent => :destroy
+  has_many :article_users, :dependent => :destroy
 
   enum lang: Lang::LANG
   enum sex: {male: 1, female: 2}
@@ -35,5 +37,10 @@ class User < ApplicationRecord
       default_user = User.find_by(code: :ja)
       default_user.present? ? default_user.used_langs : UsedLang.none
     end
+  end
+
+  def headline(omission='...')
+    headline = article_users.where(menu_type: :top_page).first.try(:article).try(:headline)
+    headline + omission if headline.present?
   end
 end

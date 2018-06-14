@@ -26,13 +26,15 @@
 
 
 <% content_for :sub_menu do %>
-  <%= link_to new_article_path(parent_id: params[:parent_id], directory: true), class: 'btn' do %>
-    <i class="icon-folder-alt"></i>
-    カテゴリ追加
-  <% end %>
-  <%= link_to new_article_path(parent_id: params[:parent_id]), class: 'btn' do %>
-    <i class="icon-pencil"></i>
-    記事作成
+  <% if @target_group.blank? and @target_user.blank? %>
+    <%= link_to new_article_path(parent_id: @article.try(:id), directory: true), class: 'btn' do %>
+      <i class="icon-folder-alt"></i>
+      カテゴリ追加
+    <% end %>
+    <%= link_to new_article_path(parent_id: @article.try(:id)), class: 'btn' do %>
+      <i class="icon-pencil"></i>
+      記事作成
+    <% end %>
   <% end %>
 <% end %>
 
@@ -47,15 +49,17 @@
     <% @articles.where(directory: true).each do |article| %>
       <tr>
         <td>
-          <%= link_to article, style: 'text-decoration:none;' do %>
+          <%= link_to target_article_path(article, @target_group, @target_user), style: 'text-decoration:none;' do %>
             <div style="width:100%;height:100%;">
               <i class="icon-folder-alt"></i>&nbsp;<%= article.title %><small style="margin-left: 20px;"><%= truncate(article.headline, length: 50) %></small>
             </div>
           <% end %>
         </td>
         <td>
-          <%= link_to edit_article_path(article) do %>
-            <i class="fa fa-edit fa-lg"></i>
+          <% if article.user_id == current_user.id %>
+            <%= link_to edit_article_path(article) do %>
+              <i class="fa fa-edit fa-lg"></i>
+            <% end %>
           <% end %>
         </td>
       </tr>
@@ -66,7 +70,7 @@
   <div class="row">
     <% @articles.where(directory: false).each do |article| %>
     <div class="col-sm-6 col-lg-4 col-xl-3">
-      <%= link_to article, class: 'card-link' do %>
+      <%= link_to target_article_path(article, @target_group, @target_user), class: 'card-link' do %>
         <div class="card card-article<% if article.directory? %> card-accent-secondary<% end %>">
           <div class="card-header card-header-article">
             <%= article.title %>

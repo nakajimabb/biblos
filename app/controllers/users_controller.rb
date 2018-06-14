@@ -1,4 +1,20 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [:show]
+
+  def index
+    @users = User.all
+  end
+
+  def home
+    @user = current_user
+    @bread_crumb = [['ホーム', nil]]
+    render 'show'
+  end
+
+  def show
+    @bread_crumb = [[@user.nickname, nil], ['トップ', nil]]
+  end
+
   def edit_profile
     @user = current_user
     @bibles = Bible.accessible(current_user.id)
@@ -55,6 +71,9 @@ class UsersController < ApplicationController
   end
 
 private
+  def set_user
+    @user = @target_user = User.find(params[:id])
+  end
 
   def user_params
     params.require(:user).permit(:code, :nickname, :lang, :password, :password_confirmation, :current_password, :sex, :birthday,
