@@ -109,10 +109,11 @@ private
     bread_crumb << ['記事一覧', helpers.target_articles_path(target_group, target_user)]
     if article.present?
       parents = article.parents
+      parents << article
       parents.each do |article2|
-        bread_crumb << [article2.title, helpers.target_article_path(article2, target_group, target_user)]
+        url = article2.directory? ? helpers.target_article_path(article2, target_group, target_user) : nil
+        bread_crumb << [article2.title, url]
       end
-      bread_crumb << [article.title, article.directory? ? article : nil]
     end
     bread_crumb
   end
