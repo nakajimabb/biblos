@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :lockable, :timeoutable  #, :confirmable, :omniauthable
+         :lockable, :timeoutable, invite_for: 3.weeks  #, :confirmable, :omniauthable
 
   has_many :group_users, :dependent => :destroy
   has_many :groups, :through => :group_users
@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :used_bibles, :dependent => :destroy
   has_many :articles, :dependent => :destroy
   has_many :article_users, :dependent => :destroy
+  belongs_to :invited_by, polymorphic: true
+  has_many :invitations, class_name: 'User', as: :invited_by
 
   enum lang: Lang::LANG
   enum sex: {male: 1, female: 2}

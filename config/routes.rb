@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   get '/users/edit_profile'
   patch '/users/update_profile', to: 'users#update_profile'
   post '/users/update_used_bibles', to: 'users#update_used_bibles'
-  devise_for :users, module: :users
+  get '/users/invitation'
+  post '/users/send_invitation', to: 'users#send_invitation'
+  # devise_for :users, module: :users
+  devise_for :users, controllers: { invitations: 'users/invitations' }
   resources :users, :only => [:index, :show]
 
   get '/groups/:id/members', to: 'groups#members'

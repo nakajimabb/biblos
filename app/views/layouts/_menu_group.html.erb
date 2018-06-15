@@ -19,7 +19,7 @@
     <% article = article_group.article %>
     <li class="nav-item">
       <%= link_to group_article_path(article, group_id: @target_group.id), class: 'nav-link' do %>
-        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <% css_class = article.directory? ? 'icon-folder-alt' : 'icon-star' %>
         <i class="<%= css_class %>"></i> <%= article.title %>
       <% end %>
     </li>

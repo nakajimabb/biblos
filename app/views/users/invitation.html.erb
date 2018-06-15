@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card mx-4">
+      <div class="card-body p-4">
+        <h2>友人を招待</h2>
+        <p class="text-muted">Invite your friend</p>
+
+        <%= form_tag action: :send_invitation do %>
+          <div class="form-group">
+            <%= email_field_tag :email, params[:email], placeholder: 'Email', class: 'form-control' %>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <%= text_field_tag :last_name, params[:last_name], placeholder: '姓', class: 'form-control' %>
+            </div>
+            <div class="form-group col-md-6">
+              <%= text_field_tag :first_name, params[:first_name], placeholder: '名', class: 'form-control' %>
+            </div>
+          </div>
+
+          <%= submit_tag '友人を招待する', class: 'btn btn-block btn-success' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

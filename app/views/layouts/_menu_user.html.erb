@@ -14,7 +14,7 @@
     <% article = article_user.article %>
     <li class="nav-item">
       <%= link_to user_article_path(article, user_id: @target_user.id), class: 'nav-link' do %>
-        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <% css_class = article.directory? ? 'icon-folder-alt' : 'icon-star' %>
         <i class="<%= css_class %>"></i> <%= article.title %>
       <% end %>
     </li>

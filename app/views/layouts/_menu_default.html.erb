@@ -13,7 +13,7 @@
     <% article = article_user.article %>
     <li class="nav-item">
       <%= link_to article, class: 'nav-link' do %>
-        <% css_class = article.directory? ? 'fa fa-folder-o fa-lg' : 'fa fa-circle-o fa-lg' %>
+        <% css_class = article.directory? ? 'icon-folder-alt' : 'icon-star' %>
         <i class="<%= css_class %>"></i> <%= article.title %>
       <% end %>
     </li>
@@ -26,13 +26,13 @@
     </li>
   <% end %>
   <li class="nav-item">
-    <a class="nav-link" href="/groups/">
-      <i class="nav-icon icon-people"></i> グループ一覧
+    <a class="nav-link" href="/users/edit_profile">
+      <i class="nav-icon icon-settings"></i> 各種設定
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/users/edit_profile">
-      <i class="nav-icon icon-settings"></i> 各種設定
+    <a class="nav-link" href="/users/invitation">
+      <i class="nav-icon icon-user-follow"></i> 招待
     </a>
   </li>
   <li class="nav-item nav-dropdown">
