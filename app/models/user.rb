@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :used_bibles, :dependent => :destroy
   has_many :articles, :dependent => :destroy
   has_many :article_users, :dependent => :destroy
-  belongs_to :invited_by, polymorphic: true
+  belongs_to :invited_by, polymorphic: true, optional: true
   has_many :invitations, class_name: 'User', as: :invited_by
 
   enum lang: Lang::LANG

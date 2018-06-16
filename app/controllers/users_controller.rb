@@ -32,12 +32,6 @@ class UsersController < ApplicationController
         user_p.delete(:password)
         user_p.delete(:password_confirmation)
       end
-      if user_p[:first_name_en].blank? && user_p[:first_name_kana].present?
-        user_p[:first_name_en] = Romaji.kana2romaji(user_p[:first_name_kana]).capitalize
-      end
-      if user_p[:last_name_en].blank?  && user_p[:last_name_kana].present?
-        user_p[:last_name_en]  = Romaji.kana2romaji(user_p[:last_name_kana]).capitalize
-      end
 
       @user.attributes = user_p
       @user.save!
@@ -74,7 +68,7 @@ class UsersController < ApplicationController
     begin
       raise 'Emailを入力してください' if params[:email].blank? or params[:email].blank?
       raise '氏名を入力してください' if params[:first_name].blank? or params[:last_name].blank?
-      user = User.invite!({email: params[:email], nickname: params[:last_name]}, current_user)
+      user = User.invite!({email: params[:email], nickname: params[:last_name], lang: :ja}, current_user)
       if user.present?
         user_prop = user.user_props.find_or_initialize_by(key: :first_name)
         user_prop.update!(value: params[:first_name], auth: :auth_user)
