@@ -15,7 +15,7 @@ class Bible < ApplicationRecord
 
   BIBLE_SIZE = (Canon::BOOKS[:ot].map { |book| [book[1], book[3]] }.to_h).merge(Canon::BOOKS[:nt].map { |book| [book[1], book[3]] }.to_h)
 
-  Word = Struct.new(:text, :lemma, :morph) do
+  Phrase = Struct.new(:name, :text, :lemma, :morph) do
     def lemma_code
       /([G,H])(\d+)/.match(self.lemma) ? $1 + $2.to_i.to_s : ''
     end
@@ -54,23 +54,22 @@ class Bible < ApplicationRecord
           doc = REXML::Document.new(raw_text)
           root = doc.elements['root']
           if root.text.present?
-            result[verse] << Word.new(root.text, nil, nil)
+            result[verse] << Phrase.new(:phrase_text, root.text, nil, nil)
           end
-          root.elements.each('w') do |w|
-            text = ''
-            lemma = lemma_or_morph(w.attributes['lemma'])
-            morph = lemma_or_morph(w.attributes['morph'])
-            text += w.text if w.text.present?
-            w.elements.each('seg') do |seg|
-              text += seg.text if seg.text.present?
+          root.elements.each do |elem|
+            if elem.name == 'w'
+              text = ''
+              lemma = lemma_or_morph(elem.attributes['lemma'])
+              morph = lemma_or_morph(elem.attributes['morph'])
+              text += elem.text if elem.text.present?
+              elem.elements.each('seg') do |seg|
+                text += seg.text if seg.text.present?
+              end
+              result[verse] << Phrase.new(:phrase_word, text.strip, lemma, morph)
+            elsif elem.name == 'seg'
+              result[verse] << Phrase.new(:phrase_seg, elem.text, nil, nil) if elem.text.present?
             end
-            result[verse] << Word.new(text, lemma, morph)
           end
-          # root.elements.each('seg') do |seg|
-          #   if seg.text.present?
-          #     result[verse] << Word.new(seg.text, nil, nil)
-          #   end
-          # end
         end
       end
       result
