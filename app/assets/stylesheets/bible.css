@@ -62,6 +62,7 @@ ul.passage li {
 }
 
 .phrase_text {
+  text-shadow: 4px 4px 4px #aaa;
   font-size: 125%;
 }
 
