@@ -1,3 +1,4 @@
+require 'rexml/document'
 require 'sword'
 
 
@@ -30,38 +31,51 @@ class Bible < ApplicationRecord
     end
   end
 
+  def lemma_or_morph(str)
+    if str.present?
+      i = str.rindex(':')
+      if i
+        str[(i+1)..-1]
+      else
+        str
+      end
+    end
+  end
+
   def get_passages(book_code, chapter, verse1, verse2)
     if bible_books.exists?(book_code: book_code)
       sword = Bible.get_sword_module(self.code)
-      result = {}
+      result = Hash.new{ |hash, key| hash[key] = [] }
       (verse1..verse2).each_with_index do |verse, i|
-        text = sword.raw_entry(book_code, chapter.to_i, verse)
-        text = text.try(:force_encoding, 'utf-8')
-        word = text.present? ? Word.new(text, nil, nil) : nil
-        result[verse] = [word] if word.present?
+        raw_text = sword.raw_entry(book_code, chapter.to_i, verse)
+        raw_text = raw_text.try(:force_encoding, 'utf-8')
+        if raw_text.present?
+          raw_text = '<root>' + raw_text + '</root>'
+          doc = REXML::Document.new(raw_text)
+          root = doc.elements['root']
+          if root.text.present?
+            result[verse] << Word.new(root.text, nil, nil)
+          end
+          root.elements.each('w') do |w|
+            text = ''
+            lemma = lemma_or_morph(w.attributes['lemma'])
+            morph = lemma_or_morph(w.attributes['morph'])
+            text += w.text if w.text.present?
+            w.elements.each('seg') do |seg|
+              text += seg.text if seg.text.present?
+            end
+            result[verse] << Word.new(text, lemma, morph)
+          end
+          # root.elements.each('seg') do |seg|
+          #   if seg.text.present?
+          #     result[verse] << Word.new(seg.text, nil, nil)
+          #   end
+          # end
+        end
       end
       result
     end
   end
-
-  # def get_passages(book_code, chapter, verse1, verse2)
-  #   if bible_books.exists?(book_code: book_code)
-  #     sword = Bible.get_sword_module(self.code)
-  #     words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
-  #     result = {}
-  #     (verse1..verse2).each_with_index do |verse, i|
-  #       passage = words[i].map do |word|
-  #         text = word['Text'].try(:force_encoding, 'utf-8')
-  #         lemma = word['Lemma'].try(:force_encoding, 'utf-8')
-  #         morph = word['Morph'].try(:force_encoding, 'utf-8')
-  #         text.present? ? Word.new(text, lemma, morph) : nil
-  #       end
-  #       passage.compact!
-  #       result[verse] = passage if passage.present?
-  #     end
-  #     result
-  #   end
-  # end
 
   def self.load_sword_modules
     modules = {}
