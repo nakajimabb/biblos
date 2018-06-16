@@ -3,6 +3,8 @@ class Article < ApplicationRecord
   belongs_to :group, optional: true
   belongs_to :parent, class_name: 'Article', foreign_key: :parent_id, optional: true
   has_many :children, class_name: 'Article', foreign_key: :parent_id
+  has_many :article_users, :dependent => :destroy
+  has_many :article_groups, :dependent => :destroy
 
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
 
