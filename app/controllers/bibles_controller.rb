@@ -1,4 +1,4 @@
-require 'sword'
+# require 'sword'
 
 
 class BiblesController < ApplicationController
@@ -66,33 +66,33 @@ class BiblesController < ApplicationController
     render json: result.to_json
   end
 
-  def import_sword
-    @title = 'import sword modules'
-    @action = :import_sword_exec
-
-    render 'shared/simple_form'
-  end
-
-  def import_sword_exec
-    @title = 'import sword modules'
-    @action = :import_sword_exec
-
-    modules = Bible.load_sword_modules
-    modules.each do |name, infos|
-      bible = Bible.find_by(code: name)
-      if bible.blank?
-        bible = Bible.create(code: name, name: name, short_name: name, module_type: :sword, lang: infos['lang'], auth: :auth_public)
-        bible.update(rank: bible.id)
-      end
-      book_names = Sword::Sword.get_book_names(name)
-      book_names.each do |book_code|
-        if Canon::ENUM_BOOK.keys.include?(book_code.to_sym)
-          unless bible.bible_books.exists?(book_code: book_code)
-            bible.bible_books.create(book_code: book_code)
-          end
-        end
-      end
-    end
-    render 'shared/simple_form'
-  end
+  # def import_sword
+  #   @title = 'import sword modules'
+  #   @action = :import_sword_exec
+  #
+  #   render 'shared/simple_form'
+  # end
+  #
+  # def import_sword_exec
+  #   @title = 'import sword modules'
+  #   @action = :import_sword_exec
+  #
+  #   modules = Bible.load_sword_modules
+  #   modules.each do |name, infos|
+  #     bible = Bible.find_by(code: name)
+  #     if bible.blank?
+  #       bible = Bible.create(code: name, name: name, short_name: name, module_type: :sword, lang: infos['lang'], auth: :auth_public)
+  #       bible.update(rank: bible.id)
+  #     end
+  #     book_names = Sword::Sword.get_book_names(name)
+  #     book_names.each do |book_code|
+  #       if Canon::ENUM_BOOK.keys.include?(book_code.to_sym)
+  #         unless bible.bible_books.exists?(book_code: book_code)
+  #           bible.bible_books.create(book_code: book_code)
+  #         end
+  #       end
+  #     end
+  #   end
+  #   render 'shared/simple_form'
+  # end
 end

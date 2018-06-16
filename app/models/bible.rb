@@ -33,21 +33,35 @@ class Bible < ApplicationRecord
   def get_passages(book_code, chapter, verse1, verse2)
     if bible_books.exists?(book_code: book_code)
       sword = Bible.get_sword_module(self.code)
-      words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
       result = {}
       (verse1..verse2).each_with_index do |verse, i|
-        passage = words[i].map do |word|
-          text = word['Text'].try(:force_encoding, 'utf-8')
-          lemma = word['Lemma'].try(:force_encoding, 'utf-8')
-          morph = word['Morph'].try(:force_encoding, 'utf-8')
-          text.present? ? Word.new(text, lemma, morph) : nil
-        end
-        passage.compact!
-        result[verse] = passage if passage.present?
+        text = sword.raw_entry(book_code, chapter.to_i, verse)
+        text = text.try(:force_encoding, 'utf-8')
+        word = text.present? ? Word.new(text, nil, nil) : nil
+        result[verse] = [word] if word.present?
       end
       result
     end
   end
+
+  # def get_passages(book_code, chapter, verse1, verse2)
+  #   if bible_books.exists?(book_code: book_code)
+  #     sword = Bible.get_sword_module(self.code)
+  #     words = sword.get_texts(book_code, chapter.to_i, verse1.to_i, verse2.to_i)
+  #     result = {}
+  #     (verse1..verse2).each_with_index do |verse, i|
+  #       passage = words[i].map do |word|
+  #         text = word['Text'].try(:force_encoding, 'utf-8')
+  #         lemma = word['Lemma'].try(:force_encoding, 'utf-8')
+  #         morph = word['Morph'].try(:force_encoding, 'utf-8')
+  #         text.present? ? Word.new(text, lemma, morph) : nil
+  #       end
+  #       passage.compact!
+  #       result[verse] = passage if passage.present?
+  #     end
+  #     result
+  #   end
+  # end
 
   def self.load_sword_modules
     modules = {}
