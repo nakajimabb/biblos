@@ -28,7 +28,7 @@
 <script type="text/javascript" charset="utf-8">
   function hover_lemma(){
     var e = $(this);
-    var lemma = e.data('lemma');
+    var lemma = e.text();
     var msg;
 
     var req = "/dictionaries/get.json?lemma=" + lemma;
@@ -67,7 +67,7 @@
 
   $(function () {
     $('.select2').select2({theme: "bootstrap"});
-    $('[data-toggle="tooltip_lemma"]').tooltip({
+    $('.lemma').tooltip({
       title: hover_lemma,
       html: true,
       container: 'body'

@@ -15,9 +15,37 @@ class Bible < ApplicationRecord
 
   BIBLE_SIZE = (Canon::BOOKS[:ot].map { |book| [book[1], book[3]] }.to_h).merge(Canon::BOOKS[:nt].map { |book| [book[1], book[3]] }.to_h)
 
-  Phrase = Struct.new(:name, :text, :lemma, :morph) do
-    def lemma_code
-      /([G,H])(\d+)/.match(self.lemma) ? $1 + $2.to_i.to_s : ''
+  class Phrase
+    attr_accessor :name, :text, :attributes, :parent, :children
+
+    def initialize(name, text=nil, attributes=nil, parent=nil)
+      @name = name
+      @text = text
+      @attributes = attributes
+      @parent = parent
+      @children = []
+    end
+
+    def level
+      level = 0
+      phrase = parent
+      while phrase
+        level += 1
+        phrase = phrase.parent
+      end
+      level
+    end
+
+    def attr_value(attr_name)
+      str = attributes[attr_name]
+      if str.present?
+        i = str.rindex(':')
+        if i
+          str[(i+1)..-1]
+        else
+          str
+        end
+      end
     end
   end
 
@@ -28,17 +56,6 @@ class Bible < ApplicationRecord
                                           auths[:auth_public], auths[:auth_user], user_id, auths[:auth_group], group_ids)
     else
       all.where(hidden: false, auth: :auth_public)
-    end
-  end
-
-  def lemma_or_morph(str)
-    if str.present?
-      i = str.rindex(':')
-      if i
-        str[(i+1)..-1]
-      else
-        str
-      end
     end
   end
 
@@ -53,26 +70,44 @@ class Bible < ApplicationRecord
           raw_text = '<root>' + raw_text + '</root>'
           doc = REXML::Document.new(raw_text)
           root = doc.elements['root']
-          if root.text.present?
-            result[verse] << Phrase.new(:phrase_text, root.text, nil, nil)
-          end
-          root.elements.each do |elem|
-            if elem.name == 'w'
-              text = ''
-              lemma = lemma_or_morph(elem.attributes['lemma'])
-              morph = lemma_or_morph(elem.attributes['morph'])
-              text += elem.text if elem.text.present?
-              elem.elements.each('seg') do |seg|
-                text += seg.text if seg.text.present?
-              end
-              result[verse] << Phrase.new(:phrase_word, text.strip, lemma, morph)
-            elsif elem.name == 'seg'
-              result[verse] << Phrase.new(:phrase_seg, elem.text, nil, nil) if elem.text.present?
-            end
-          end
+          result[verse] = Bible.parse_phrase(root)
         end
       end
       result
+    end
+  end
+
+  def self.parse_phrase(element, parent=nil)
+    phrase = Phrase.new(element.name.to_sym, element.texts.join.strip, element.attributes, parent)
+    children = []
+    element.elements.each do |elem|
+      children << parse_phrase(elem, phrase)
+    end
+    phrase.children = children
+    phrase
+  end
+
+  def self.pick_notes(phrase)
+    notes = []
+    if phrase.name == :note
+      if phrase.text.present?
+        notes << phrase.dup
+        phrase.name = :seg
+        phrase.text = '*'
+      end
+    else
+      phrase.children.each do |child|
+        notes += pick_notes(child)
+      end
+    end
+    notes
+  end
+
+  def self.merge_phrase(elements)
+    if elements.present?
+      Phrase.new(elements.first.name,
+                 elements.map{ |e| e.text }.join.strip,
+                 elements.map{ |e| e.attributes }.reduce({}){ |hash, attr| hash.merge(attr) })
     end
   end
 

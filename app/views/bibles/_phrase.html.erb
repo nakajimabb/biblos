@@ -1,0 +1,18 @@
+<% if phrase.name != :note %><!--
+  --><div class="<%= phrase_class_text(phrase) %>" <%= phrase_attr_text(phrase) %>><!--
+    --><%= phrase.text %><!--
+    --><% phrase.children.each do |child| %><!--
+      --><%= render 'bibles/phrase', phrase: child, select_lemma: select_lemma %><!--
+    --><% end %><!--
+    --><% if phrase.attributes['lemma'].present? %><!--
+        --><div class="lemma"><!--
+           --><% lemma = phrase.attr_value('lemma') %><!--
+           --><% color = equal_lemma?(select_lemma, lemma) ? 'color:red;' : '' if select_lemma.present? %><!--
+           --><%= link_to lemma, {controller: :dictionaries, action: :get, lemma: lemma}, target: '_blank', style: color %><!--
+        --></div><!--
+    --><% end %><!--
+    --><% if phrase.attributes['morph'].present? %><!--
+        --><div class="morph"><%= phrase.attr_value('morph') %></div><!--
+    --><% end %><!--
+  --></div><!--
+--><% end %>

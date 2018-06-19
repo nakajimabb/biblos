@@ -1,25 +1,6 @@
 <fieldset class="fieldset" style="background-color: #f8f8f2">
   <legend class="fieldset"><%= name %></legend>
-  <div class="<%= lang %>">
-    <ul class="passage">
-      <% passage.each do |phrase| %>
-        <li>
-          <span class="<%= phrase.name %> <%= lang %>"><%= phrase.text %></span>
-          <% if phrase.lemma.present? %>
-            <br>
-            <span class="lemma" data-placement="bottom" data-toggle="tooltip_lemma" data-lemma="<%= phrase.lemma %>" >
-              <% color = equal_lemma?(select_lemma, phrase.lemma) ? 'color:red;' : '' if select_lemma.present? %>
-              <%= link_to phrase.lemma, {controller: :dictionaries, action: :get, lemma: phrase.lemma}, target: '_blank', style: color %>
-            </span>
-          <% end %>
-          <% if phrase.morph.present? %>
-            <br>
-            <span class="morph" data-placement="bottom" data-toggle="tooltip_morph" >
-              <%= phrase.morph %>
-            </span>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+  <div class="clearfix <%= lang %>">
+    <%= render 'bibles/phrase', phrase: passage, select_lemma: select_lemma %>
   </div>
 </fieldset>

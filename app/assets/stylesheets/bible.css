@@ -50,41 +50,42 @@ ul.passage {
 }
 
 ul.passage li {
-  margin: 2px 0;
+  margin: 0;
   display: inline-block;
   vertical-align: top;
 }
 
-.phrase_word {
-  margin-left: 5px;
+.phrase-w {
+  margin: 0 6px;
   text-shadow: 4px 4px 4px #aaa;
-  font-size: 125%;
+  display: inline-block;
+  vertical-align: top;
 }
 
-.phrase_text {
+.phrase-seg {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.phrase-root {
   text-shadow: 4px 4px 4px #aaa;
-  font-size: 125%;
+  vertical-align: top;
 }
 
-.phrase_seg {
-  margin-right: 10px;
+.lemma,.morph {
+  font-family: initial;
+  font-size: x-small;
+  text-shadow: initial;
 }
 
-.lemma {
-  font-size: 80%;
-}
-
-div.he {
+.he {
   direction: rtl;
   text-align: right;
-}
-
-span.he {
   font-size: 180%;
   font-family: 'Tinos', serif;
 }
 
-span.grc {
+.grc {
   font-size: 130%;
   font-family: 'NotoSerif', serif;
 }
