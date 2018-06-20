@@ -1,0 +1,30 @@
+<div class="card">
+  <div class="card-header">SWORD モジュール一覧</div>
+  <!-- /.box-header -->
+  <div class="card-body">
+    <%= form_tag({controller: :bibles, action: :check_sword}, {method: :get}) do %>
+      <div class="form-inline">
+        <%= select_tag :bible_id, options_from_collection_for_select(Bible.all, :id, :name, params[:bible_id]), include_blank: true, class: 'form-control select2'  %>
+        <%= select_tag :book_code, options_for_select(@books, params[:book_code]), include_blank: true, class: 'form-control select2'  %>
+        <%= select_tag :ot_nt, options_for_select([:ot, :nt], params[:ot_nt]), class: 'form-control'  %>
+        <input type="submit" class="btn btn-primary ml-sm-1">
+      </div>
+    <% end %>
+
+    <% if @err_passages.present? %>
+      <table>
+        <tbody>
+          <% @err_passages.each do |err_passage| %>
+            <tr>
+              <td><%= err_passage[0] %></td>
+              <td><%= err_passage[1] %></td>
+              <td><%= err_passage[2] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+  <!-- /.box-body -->
+</div>
+

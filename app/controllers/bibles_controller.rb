@@ -66,6 +66,37 @@ class BiblesController < ApplicationController
     render json: result.to_json
   end
 
+  def check_sword
+    ot_books = Canon::BOOKS[:ot].map { |book| [book[0], book[1]] }
+    nt_books = Canon::BOOKS[:nt].map { |book| [book[0], book[1]] }
+    @books = ot_books + nt_books
+    if params[:bible_id].present? && params[:ot_nt]
+      @err_passages = []
+      bible =Bible.find(params[:bible_id])
+      cannon_ot = Canon::BOOKS[:ot].map{ |item| [item[1], item[3]] }.to_h
+      cannon_nt = Canon::BOOKS[:nt].map{ |item| [item[1], item[3]] }.to_h
+      cannon = params[:ot_nt] == 'ot' ? cannon_ot : cannon_nt
+
+      cannon.each do |book_code, verse_counts|
+        verse_counts.each_with_index do |verse_count, i|
+          chapter = i + 1
+          passages = bible.get_passages(book_code, chapter, 1, verse_count)
+          if passages.present?
+            1.step(verse_count) do |verse|
+              if passages.has_key?(verse)
+                @err_passages << [book_code, chapter, verse] if passages[verse].empty?
+              else
+                @err_passages << [book_code, chapter, verse]
+              end
+            end
+          else
+            @err_passages << [book_code, chapter, nil]
+          end
+        end
+      end
+    end
+  end
+
   # def import_sword
   #   @title = 'import sword modules'
   #   @action = :import_sword_exec

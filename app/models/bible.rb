@@ -18,22 +18,15 @@ class Bible < ApplicationRecord
   class Phrase
     attr_accessor :name, :text, :attributes, :parent, :children
 
-    def initialize(name, text=nil, attributes=nil, parent=nil)
+    def initialize(name, text=nil, attributes=nil)
       @name = name
       @text = text
       @attributes = attributes
-      @parent = parent
       @children = []
     end
 
-    def level
-      level = 0
-      phrase = parent
-      while phrase
-        level += 1
-        phrase = phrase.parent
-      end
-      level
+    def empty?
+      @text.blank? && @children.blank?
     end
 
     def attr_value(attr_name)
@@ -66,6 +59,7 @@ class Bible < ApplicationRecord
       (verse1..verse2).each_with_index do |verse, i|
         raw_text = sword.raw_entry(book_code, chapter.to_i, verse)
         raw_text = raw_text.try(:force_encoding, 'utf-8')
+        raw_text = Bible.strip_raw_entry(raw_text)
         if raw_text.present?
           raw_text = '<root>' + raw_text + '</root>'
           doc = REXML::Document.new(raw_text)
@@ -77,11 +71,20 @@ class Bible < ApplicationRecord
     end
   end
 
-  def self.parse_phrase(element, parent=nil)
-    phrase = Phrase.new(element.name.to_sym, element.texts.join.strip, element.attributes, parent)
+  def self.strip_raw_entry(text)
+    i = text.index(/<CM>|<ZZ>|<\d+:/)
+    if i.nil?
+      text
+    else
+      text[0...i]
+    end
+  end
+
+  def self.parse_phrase(element)
+    phrase = Phrase.new(element.name.to_sym, element.texts.join.strip, element.attributes)
     children = []
     element.elements.each do |elem|
-      children << parse_phrase(elem, phrase)
+      children << parse_phrase(elem)
     end
     phrase.children = children
     phrase
