@@ -52,6 +52,11 @@ class Bible < ApplicationRecord
     end
   end
 
+  def get_raw_entry(book_code, chapter, verse)
+    sword = Bible.get_sword_module(self.code)
+    sword.raw_entry(book_code, chapter, verse)
+  end
+
   def get_passages(book_code, chapter, verse1, verse2)
     if bible_books.exists?(book_code: book_code)
       sword = Bible.get_sword_module(self.code)

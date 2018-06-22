@@ -75,38 +75,45 @@ class BiblesController < ApplicationController
       bible =Bible.find(params[:bible_id])
       cannon_ot = Canon::BOOKS[:ot].map{ |item| [item[1], item[3]] }.to_h
       cannon_nt = Canon::BOOKS[:nt].map{ |item| [item[1], item[3]] }.to_h
+      cannon_nt = Canon::BOOKS[:nt].map{ |item| [item[1], item[3]] }.to_h
       cannon = params[:ot_nt] == 'ot' ? cannon_ot : cannon_nt
 
       cannon.each do |book_code, verse_counts|
+        bible_book = BibleBook.find_or_initialize_by(bible_id: bible.id, book_code: book_code)
         verse_counts.each_with_index do |verse_count, i|
           chapter = i + 1
-          passages = bible.get_passages(book_code, chapter, 1, verse_count)
-          if passages.present?
+          raw_text = {}
+          1.step(verse_count) do |verse|
+            raw_text[verse] = bible.get_raw_entry(book_code, chapter, verse)
+          end
+          if raw_text.present?
             1.step(verse_count) do |verse|
-              if passages.has_key?(verse)
-                @err_passages << [book_code, chapter, verse] if passages[verse].empty?
+              if raw_text[verse].present?
+                bible_book.save! if bible_book.new_record?
               else
-                @err_passages << [book_code, chapter, verse]
+                @err_passages << [book_code, chapter, verse, 'empty']
               end
             end
           else
-            @err_passages << [book_code, chapter, nil]
+            @err_passages << [book_code, chapter, nil, 'empty']
           end
         end
       end
     end
   end
 
+private
+
   # def import_sword
   #   @title = 'import sword modules'
-  #   @action = :import_sword_exec
+  #   @action = :load_sword
   #
   #   render 'shared/simple_form'
   # end
   #
-  # def import_sword_exec
+  # def load_sword
   #   @title = 'import sword modules'
-  #   @action = :import_sword_exec
+  #   @action = :load_sword
   #
   #   modules = Bible.load_sword_modules
   #   modules.each do |name, infos|

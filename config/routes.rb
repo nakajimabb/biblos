@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'bibles/size_info'
   get 'bibles/import_sword'
-  post 'bibles/import_sword_exec', to: 'bibles#import_sword_exec'
+  post 'bibles/load_sword', to: 'bibles#load_sword'
   get 'bibles/sword'
   get 'bibles/get_bibles'
   get 'bibles/check_sword'
