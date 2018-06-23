@@ -16,6 +16,7 @@ class DictionariesController < ApplicationController
               @vocab_count = VocabCount.find_by(bible_id: select_bible.id, book_code: params[:book_code], lemma: @lemma)
               @vocab_indices = @vocab_count.vocab_indices.page(params[:page]) if @vocab_count.present?
               used_bibles = current_user.valid_used_bibles.map { |used_bible| used_bible.bible }
+              used_bibles.sort_by!{ |bible| bible.rank }
               @bible_names = used_bibles.map { |bible| [bible.code, bible.name] }.to_h
 
               @passages = {}

@@ -30,7 +30,7 @@ class BiblesController < ApplicationController
         @verse1 = params[:verse1].to_i
         @verse2 = params[:verse2].to_i
         @select_modules = {}
-        Bible.accessible(current_user.id).where(code: params[:modules]).each do |bible|
+        Bible.accessible(current_user.id).where(code: params[:modules]).order(:rank).each do |bible|
           @select_modules[bible.code] = bible
           passages = bible.get_passages(params[:book_code], @chapter, @verse1, @verse2)
           if passages.present?
@@ -74,7 +74,6 @@ class BiblesController < ApplicationController
       @err_passages = []
       bible =Bible.find(params[:bible_id])
       cannon_ot = Canon::BOOKS[:ot].map{ |item| [item[1], item[3]] }.to_h
-      cannon_nt = Canon::BOOKS[:nt].map{ |item| [item[1], item[3]] }.to_h
       cannon_nt = Canon::BOOKS[:nt].map{ |item| [item[1], item[3]] }.to_h
       cannon = params[:ot_nt] == 'ot' ? cannon_ot : cannon_nt
 
