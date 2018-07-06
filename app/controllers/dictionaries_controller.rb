@@ -5,7 +5,7 @@ class DictionariesController < ApplicationController
 
       if m.present?
         @lemma = m[1] + m[2].to_i.to_s
-        @vocabularies = Vocabulary.where(lemma: @lemma)
+        @vocabularies = Vocabulary.accessible(current_user.id).where(lemma: @lemma)
         bible_ids = VocabCount.where(lemma: @lemma).group(:bible_id).pluck(:bible_id)
         @bibles = Bible.where(id: bible_ids)
 
