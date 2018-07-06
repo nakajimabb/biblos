@@ -91,7 +91,7 @@
       </h4>
       <% @vocabularies.each do |vocabulary| %>
         <div style="margin-left: 10px;">
-          <b><%= vocabulary.dictionary.name %>'s Definition</b>
+          <b><%= vocabulary.dictionary.name %></b>
           <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
         </div>
       <% end %>
