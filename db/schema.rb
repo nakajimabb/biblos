@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_15_122604) do
+ActiveRecord::Schema.define(version: 2018_07_07_035721) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -287,7 +287,7 @@ ActiveRecord::Schema.define(version: 2018_06_15_122604) do
   create_table "vocabularies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "dictionary_id", null: false
     t.string "spell", null: false
-    t.string "lemma", null: false
+    t.string "lemma"
     t.text "meaning"
     t.string "outline"
     t.string "pronunciation"
