@@ -1,8 +1,8 @@
 class VocabulariesController < ApplicationController
   def index
     @bread_crumb = [['聖書メニュー', nil], ['辞書検索', vocabularies_path]]
-    params[:search] = params[:search].strip
     if params[:search].present?
+      params[:search] = params[:search].strip
       vocabularies = Vocabulary.accessible(current_user.id)
       m = params[:search].match(/([GH])(\d+)/) # strong number
       if m
