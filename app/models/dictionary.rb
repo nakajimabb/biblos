@@ -4,7 +4,7 @@ class Dictionary < ApplicationRecord
   has_many :vocabularies, :dependent => :destroy
 
   enum module_type: {sword: 1, db: 2}
-  enum lang: Lang::LANG
+  enum lang: Lang::LANG.select{ |lang, _| lang == :he or lang == :grc }
   enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
 
 

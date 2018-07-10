@@ -1,0 +1,75 @@
+<style>
+  #book { width: 200px; }
+  #chapter { width: 80px; margin-left: 5px; }
+  #verse1,#verse2 { width: 80px; margin-left: 5px; }
+
+  fieldset.fieldset {
+    border: 1px groove #ddd !important;
+    padding: 0 5px 5px 5px !important;
+    margin: 5px !important;
+  }
+
+  legend.fieldset {
+    font-size: 90% !important;
+    font-weight: normal !important;
+    text-align: left !important;
+    width:auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: none;
+  }
+
+  .tooltip-inner{
+    max-width: 350px;
+  }
+</style>
+
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  $('.select2').select2({theme: "bootstrap"});
+  $('.lemma').tooltip({
+    title: hover_lemma,
+    html: true,
+    container: 'body'
+  });
+  $('.morph').tooltip({
+    title: hover_morph,
+    html: true,
+    container: 'body'
+  });
+});
+</script>
+
+<div class="card">
+  <div class="card-body">
+    <%= form_tag({controller: :vocabularies, action: :index}, {method: :get}) do %>
+      <div class="form-inline">
+        <%= text_field_tag :search, params[:search], placeholder: '検索文字', class: 'form-control mr-1', style: 'width:300px;' %>
+        <%= select_tag :lang, options_for_select(Dictionary.lang_options, params[:lang]), include_blank: true,
+                       class: 'form-control mr-1' %>
+        <%= submit_tag '検索', class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<% if @vocabularies.present? %>
+  <% @vocabularies.each do |lemma, vocabularies| %>
+    <% vocab = vocabularies.first %>
+    <div class="card">
+      <div class="card-header" style="padding:4px 15px;">
+        <span class="<%= vocab.dictionary.lang %>"><b><%= vocab.spell %></b></span>
+        (<%= link_to vocab.lemma, {controller: :dictionaries, action: :get, lemma: vocab.lemma}, target: '_blank' %>)
+        -- <%= vocab.transliteration %>
+      </div>
+      <div class="card-body">
+        <% vocabularies.each do |vocabulary| %>
+          <b><%= vocabulary.dictionary.name %></b> <br>
+          <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
