@@ -27,6 +27,9 @@ class GroupsController < ApplicationController
   end
 
 private
+  def authenticate_user!
+  end
+
   def set_group
     @group = @target_group = Group.find(params[:id])
   end

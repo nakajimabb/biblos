@@ -7,7 +7,7 @@ p { margin-bottom: 0; }
   <div class="card">
     <div class="card-header">
       <%= @article.title %>
-      <% if @article.user_id == current_user.id %>
+      <% if @article.user_id == current_user_id %>
         <div class="pull-right">
           <%= link_to edit_article_path(@article), class: 'btn', style: 'padding: 0 0.75rem;' do %>
             <i class="icon-note"></i> 編集する

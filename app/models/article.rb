@@ -6,7 +6,7 @@ class Article < ApplicationRecord
   has_many :article_users, :dependent => :destroy
   has_many :article_groups, :dependent => :destroy
 
-  enum auth: {auth_user: 1, auth_group: 2, auth_public: 3}
+  enum auth: {auth_user: 1, auth_group: 2, auth_public: 3, auth_all: 4}
 
   validates :title, presence: true
 
@@ -15,10 +15,10 @@ class Article < ApplicationRecord
   def self.accessible(user_id=nil)
     if user_id.present?
       group_ids = GroupUser.where(user_id: user_id).pluck(:group_id)
-      all.where('(auth = ?) or (auth = ? and user_id = ?) or (auth = ? and group_id in (?))',
-                                     auths[:auth_public], auths[:auth_user], user_id, auths[:auth_group], group_ids)
+      all.where('(auth >= ?) or (user_id = ?) or (auth = ? and group_id in (?))',
+                                     auths[:auth_public], user_id, auths[:auth_group], group_ids)
     else
-      all.where(auth: :auth_public)
+      all.where(auth: :auth_all)
     end
   end
 

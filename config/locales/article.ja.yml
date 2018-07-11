@@ -1,0 +1,17 @@
+ja:
+  activerecord:
+    attributes:
+      article:
+        user_id: 'ユーザ'
+        group_id: 'グループ'
+        title: 'タイトル'
+        remark: '記事'
+        headline: '見出し'
+        auth: 'アクセス権限'
+  enum:
+    article:
+      auth:
+        auth_user: '非公開'
+        auth_group: 'グループ公開'
+        auth_public: 'サイト内公開'
+        auth_all: '全公開'

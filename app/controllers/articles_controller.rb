@@ -3,16 +3,16 @@ class ArticlesController < ApplicationController
   before_action :set_target_group, only: [:index, :show]
 
   def index
-    @articles = Article.accessible(current_user.id).where(parent_id: nil)
+    @articles = Article.accessible(current_user_id).where(parent_id: nil)
     @bread_crumb = get_bread_curmb(@parent, @target_group, @target_user)
   end
 
   def show
-    @article = Article.accessible(current_user.id).find(params[:id])
+    @article = Article.accessible(current_user_id).find(params[:id])
     @bread_crumb = get_bread_curmb(@article, @target_group, @target_user)
     if @article.directory?
       @parent = @article
-      @articles = Article.accessible(current_user.id).where(parent_id: @parent.try(:id))
+      @articles = Article.accessible(current_user_id).where(parent_id: @parent.try(:id))
       render 'index'
     end
   end
@@ -26,7 +26,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    @article.user_id = current_user.id
+    @article.user_id = current_user_id
     @article.headline = get_headline(@article.remark)
     begin
       Article.transaction do
@@ -42,7 +42,7 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @article = Article.accessible(current_user.id).find(params[:id])
+    @article = Article.accessible(current_user_id).find(params[:id])
     @bread_crumb = get_bread_curmb(@article.parent)
     @bread_crumb << [@article.directory? ? 'カテゴリ編集' : '記事編集', nil]
   end
@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
   def update
     @article = Article.find(params[:id])
     begin
-      raise 'not permitted' if @article.user_id != current_user.id
+      raise 'not permitted' if @article.user_id != current_user_id
       Article.transaction do
         p = article_params
         p[:headline] = get_headline(p[:remark])
@@ -68,7 +68,7 @@ class ArticlesController < ApplicationController
   def destroy
     @article = Article.find(params[:id])
     begin
-      raise 'not permitted' if @article.user_id != current_user.id
+      raise 'not permitted' if @article.user_id != current_user_id
       @article.destroy
       redirect_to article_path(@article.parent), notice: '記事を削除しました。'
     rescue => e
@@ -77,6 +77,13 @@ class ArticlesController < ApplicationController
   end
 
 private
+
+  def current_user_id
+    current_user.try(:id)
+  end
+
+  def authenticate_user!
+  end
 
   def set_target_user
     @target_user = User.find_by_id(params[:user_id])
