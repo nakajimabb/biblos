@@ -56,7 +56,7 @@
           <% end %>
         </td>
         <td>
-          <% if article.user_id == current_user.id %>
+          <% if article.user_id == current_user.try(:id) %>
             <%= link_to edit_article_path(article) do %>
               <i class="fa fa-edit fa-lg"></i>
             <% end %>
