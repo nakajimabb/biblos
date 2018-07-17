@@ -5,7 +5,7 @@ class DictionariesController < ApplicationController
       m = params[:lemma].match(/([GH])(\d+)/) if params[:lemma].present?
       if m.present?
         @lemma = m[1] + m[2].to_i.to_s
-        @vocabularies = @vocabularies.where(lemma: @lemma).order('dictionaries.rank asc')
+        @vocabularies = @vocabularies.where(lemma: @lemma)
         bible_ids = VocabCount.where(lemma: @lemma).group(:bible_id).pluck(:bible_id)
         @bibles = Bible.where(id: bible_ids)
       else
@@ -18,6 +18,7 @@ class DictionariesController < ApplicationController
           @bibles = Bible.none
         end
       end
+      @vocabularies = @vocabularies.order('dictionaries.rank asc, vocabularies.rank asc')
 
       respond_to do |format|
         format.html do
