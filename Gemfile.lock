@@ -148,6 +148,8 @@ GEM
     public_suffix (3.0.2)
     puma (3.11.4)
     rack (2.0.5)
+    rack-mini-profiler (1.0.0)
+      rack (>= 1.2.0)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
@@ -275,6 +277,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   mysql2
   puma (~> 3.11)
+  rack-mini-profiler
   rails (~> 5.2.0)
   rails-i18n
   rails_admin
