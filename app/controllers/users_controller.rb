@@ -68,14 +68,18 @@ class UsersController < ApplicationController
   def send_invitation
     begin
       raise 'Emailを入力してください' if params[:email].blank? or params[:email].blank?
-      raise '氏名を入力してください' if params[:first_name].blank? or params[:last_name].blank?
-      nickname = params[:last_name] + ' ' + params[:first_name]
+      raise '氏名を入力してください' if params[:first_name].blank? and params[:last_name].blank?
+      nickname = params[:last_name].to_s + ' ' + params[:first_name].to_s
       user = User.invite!({email: params[:email], nickname: nickname, lang: :ja}, current_user)
       if user.present?
-        user_prop = user.user_props.find_or_initialize_by(key: :first_name)
-        user_prop.update!(value: params[:first_name], auth: :auth_user)
-        user_prop = user.user_props.find_or_initialize_by(key: :last_name)
-        user_prop.update!(value: params[:last_name], auth: :auth_user)
+        if params[:first_name].present?
+          user_prop = user.user_props.find_or_initialize_by(key: :first_name)
+          user_prop.update!(value: params[:first_name], auth: :auth_user)
+        end
+        if params[:last_name].present?
+          user_prop = user.user_props.find_or_initialize_by(key: :last_name)
+          user_prop.update!(value: params[:last_name], auth: :auth_user)
+        end
       end
       redirect_to root_path, notice: '招待メールを送信しました'
     rescue => e
