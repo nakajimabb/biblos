@@ -35,7 +35,7 @@
           <div class="card card-article<% if article.directory? %> card-accent-secondary<% end %>">
             <div class="card-header card-h
             eader-article">
-              <%= article.title %> <small><%= article.created_at.strftime('%Y-%m-%d') %></small>
+              <%= article.title %>  <small>[<%= article.author_name %> <%= article.created_at.strftime('%Y-%m-%d') %>]</small>
             </div>
             <div class="card-body card-body-article">
               <%= simple_format(article.headline + '...') %>

@@ -32,4 +32,12 @@ class Article < ApplicationRecord
     p_list.reverse! if reverse
     p_list
   end
+
+  def author_name(detail=false)
+    if detail
+      [group.try(:name), user.try(:nickname)].compact.join('／')
+    else
+      [group.try(:name), user.try(:nickname)].compact.first
+    end
+  end
 end
