@@ -3,7 +3,14 @@ class ArticlesController < ApplicationController
   before_action :set_target_group, only: [:index, :show]
 
   def index
-    @articles = Article.accessible(current_user_id).where(parent_id: nil)
+    @article = Article.accessible(current_user_id).where(parent_id: nil)
+    if @target_group.present?
+      @articles = @article.where(group_id: @target_group.id)
+    elsif @target_user.present?
+      @articles = @article.where(user_id: @target_user.id)
+    else
+      @articles = @article.where(user_id: current_user_id)
+    end
     @bread_crumb = get_bread_curmb(@parent, @target_group, @target_user)
   end
 
