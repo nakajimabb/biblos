@@ -1,0 +1,48 @@
+<style>
+  .card-link:link { color: black; text-decoration:none; }
+  .card-link:visited { color: black; text-decoration:none; }
+  .card-link:active { color: black; text-decoration:none; }
+  .card-article:hover {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -o-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -ms-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    color: black;
+  }
+  .card-article {
+    height: 250px;
+  }
+  .card-header-article {
+    padding: 5px 10px;
+  }
+  .card-body-article {
+    overflow: hidden;
+    margin: 10px;
+    padding: 0px;
+  }
+  p { margin-bottom: 0; }
+</style>
+
+
+<h4>最近の記事</h4>
+
+<div class="animated fadeIn">
+  <div class="row">
+    <% @articles.where(directory: false).each do |article| %>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <%= link_to target_article_path(article, article.group, article.user), class: 'card-link' do %>
+          <div class="card card-article<% if article.directory? %> card-accent-secondary<% end %>">
+            <div class="card-header card-h
+            eader-article">
+              <%= article.title %> <small><%= article.created_at.strftime('%Y-%m-%d') %></small>
+            </div>
+            <div class="card-body card-body-article">
+              <%= simple_format(article.headline + '...') %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

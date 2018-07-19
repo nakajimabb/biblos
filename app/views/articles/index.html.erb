@@ -73,7 +73,7 @@
       <%= link_to target_article_path(article, @target_group, @target_user), class: 'card-link' do %>
         <div class="card card-article<% if article.directory? %> card-accent-secondary<% end %>">
           <div class="card-header card-header-article">
-            <%= article.title %>
+            <%= article.title %>  <small><%= article.created_at.strftime('%Y-%m-%d') %></small>
           </div>
           <div class="card-body card-body-article">
             <%= simple_format(article.headline + '...') %>

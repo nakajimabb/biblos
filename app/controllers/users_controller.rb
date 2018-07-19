@@ -8,7 +8,8 @@ class UsersController < ApplicationController
   def home
     @user = current_user
     @bread_crumb = [['ホーム', nil]]
-    render 'show'
+    @articles = Article.accessible(current_user.id).where('created_at < ?', Date.today + 7)
+    @articles = @articles.order(created_at: :desc)
   end
 
   def show
