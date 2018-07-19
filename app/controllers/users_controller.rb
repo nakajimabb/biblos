@@ -68,7 +68,8 @@ class UsersController < ApplicationController
     begin
       raise 'Emailを入力してください' if params[:email].blank? or params[:email].blank?
       raise '氏名を入力してください' if params[:first_name].blank? or params[:last_name].blank?
-      user = User.invite!({email: params[:email], nickname: params[:last_name], lang: :ja}, current_user)
+      nickname = params[:last_name] + ' ' + params[:first_name]
+      user = User.invite!({email: params[:email], nickname: nickname, lang: :ja}, current_user)
       if user.present?
         user_prop = user.user_props.find_or_initialize_by(key: :first_name)
         user_prop.update!(value: params[:first_name], auth: :auth_user)

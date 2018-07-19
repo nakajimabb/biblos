@@ -19,8 +19,8 @@ ja:
     mailer:
       invitation_instructions:
         subject: '招待メール'
-        hello: 'こんにちは、%{email}さん'
-        someone_invited_you: 'Biblos.jp に招待されました。以下のリンクから承認できます。'
+        hello: 'こんにちは、%{nickname}さん。'
+        someone_invited_you: '%{invited_by}さんより、聖書閲覧サイト(Biblos.jp) に招待されました。以下のリンクから承認できます。'
         accept: '招待を承認する'
         accept_until: 'この招待は%{due_date}まで有効です。'
         ignore: '招待を承認しない場合は、このメールを無視してください。<br />あなたのアカウントは上記のリンク先にアクセスしパスワードを設定するまでは作成されません。<br />* このメールには返信できません。'
