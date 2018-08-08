@@ -9,8 +9,7 @@
     this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
   }
 
-  $(document).on('turbolinks:load', function() {
-    $('.ql-toolbar').remove();
+  $(function () {
     var quill = new Quill('#editor', {
       modules: {
         toolbar: {

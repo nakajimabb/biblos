@@ -31,7 +31,7 @@
       <i class="icon-folder-alt"></i>
       カテゴリ追加
     <% end %>
-    <%= link_to new_article_path(parent_id: @article.try(:id)), class: 'btn' do %>
+    <%= link_to new_article_path(parent_id: @article.try(:id)), 'data-turbolinks': false, class: 'btn' do %>
       <i class="icon-pencil"></i>
       記事作成
     <% end %>
