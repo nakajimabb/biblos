@@ -73,6 +73,9 @@
       </ul>
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag url_for(current_user.avatar), class: 'avatar-xs rounded-circle' %>&nbsp;
+          <% end %>
           <%= current_user.nickname %> <small>さん</small>
         </li>
         <li class="nav-item px-3">

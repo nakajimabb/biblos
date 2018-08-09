@@ -94,7 +94,7 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:code, :nickname, :lang, :password, :password_confirmation, :current_password, :sex, :birthday,
+    params.require(:user).permit(:code, :nickname, :lang, :password, :password_confirmation, :current_password, :sex, :birthday, :avatar,
                                  [user_props_attributes: [:id, :user_id, :key, :value, :auth]])
   end
 end

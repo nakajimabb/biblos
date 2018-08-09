@@ -10,7 +10,12 @@
 
 <div class="tab-content" style="width:640px;">
   <div class="tab-pane active show" id="profile" role="tabpanel">
-    <h3 class="profile-username text-center"><%= @user.nickname %></h3>
+    <h3 class="profile-username text-center">
+      <% if @user.avatar.attached? %>
+        <p><%= image_tag url_for(@user.avatar), class: 'avatar-m rounded-circle' %></p>
+      <% end %>
+      <%= @user.nickname %>
+    </h3>
     <%= form_for(@user, url: {action: :update_profile}) do |f| %>
       <table class="table table-condensed table-hover">
         <tr>
@@ -76,6 +81,11 @@
               <%= f.radio_button :sex, :female %><%= t('enum.user.sex.female') %>
             </label>
           </td>
+        </tr>
+        <tr>
+          <th><%= t('activerecord.attributes.user.avatar') %></th>
+          <td>公開</td>
+          <td><%= f.file_field :avatar %></td>
         </tr>
         <tr>
           <th><%= t('activerecord.attributes.user.password') %></th>

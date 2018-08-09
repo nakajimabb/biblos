@@ -15,6 +15,8 @@ class User < ApplicationRecord
   belongs_to :invited_by, polymorphic: true, optional: true
   has_many :invitations, class_name: 'User', as: :invited_by
 
+  has_one_attached :avatar
+
   enum lang: Lang::LANG
   enum sex: {male: 1, female: 2}
 

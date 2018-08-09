@@ -21,5 +21,6 @@
  *= require coreui/vendors/css/toastr.min.css
  *= require coreui/vendors/css/select2.min.css
  *= require bible.css
+ *= require user.css
  *= require_self
  */

@@ -69,5 +69,6 @@ gem 'devise_invitable'
 gem 'rails_admin'
 gem 'kaminari'
 gem 'rails-i18n'
+gem 'mini_magick'
 
 gem 'rack-mini-profiler', require: false
