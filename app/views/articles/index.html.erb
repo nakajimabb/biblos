@@ -27,7 +27,7 @@
 
 <% content_for :sub_menu do %>
   <% if @target_group.blank? and @target_user.blank? %>
-    <%= link_to new_article_path(parent_id: @article.try(:id), directory: true), class: 'btn' do %>
+    <%= link_to new_article_path(parent_id: @article.try(:id), directory: true), 'data-turbolinks': false, class: 'btn' do %>
       <i class="icon-folder-alt"></i>
       カテゴリ追加
     <% end %>
@@ -57,7 +57,7 @@
         </td>
         <td>
           <% if article.user_id == current_user.try(:id) %>
-            <%= link_to edit_article_path(article) do %>
+            <%= link_to edit_article_path(article), 'data-turbolinks': false do %>
               <i class="fa fa-edit fa-lg"></i>
             <% end %>
           <% end %>
