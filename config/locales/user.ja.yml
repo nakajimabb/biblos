@@ -8,6 +8,7 @@ ja:
         lang: '言語'
         sex: '性別'
         avatar: '顔写真'
+        images: '画像アルバム'
         password: 'パスワード'
         password_confirmation: 'パスワード(確認)'
   enum:

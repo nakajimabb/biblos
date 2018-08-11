@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :invitations, class_name: 'User', as: :invited_by
 
   has_one_attached :avatar
+  has_many_attached :images
 
   enum lang: Lang::LANG
   enum sex: {male: 1, female: 2}

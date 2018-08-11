@@ -1,0 +1,48 @@
+<style>
+  .card-article:hover {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -o-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -ms-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    color: black;
+  }
+  .card-article {
+    height: 250px;
+  }
+  .card-body-article {
+    overflow: hidden;
+    margin: 10px;
+    padding: 0px;
+  }
+  p { margin-bottom: 0; }
+</style>
+
+
+<% content_for :sub_menu do %>
+  <% if @target_group.blank? and @target_user.blank? %>
+    <%= form_for(@user, url: {action: :update_profile}, html: {class: 'form-inline'}) do |f| %>
+      <label for="user_images">
+        <i class="fa fa-plus"></i>&nbsp;画像追加
+        <%= f.file_field :images, multiple: true, onchange: 'submit();', class: 'hidden', style: 'display:none;' %>
+      </label>
+    <% end %>
+  <% end %>
+<% end %>
+
+
+<div class="animated fadeIn">
+  <div class="row">
+    <% @images.each do |image| %>
+    <div class="col-sm-6 col-lg-4 col-xl-3">
+      <%= link_to({action: :image, id: @target_user.try(:id), attachment_id: image.id}, class: 'card-link') do %>
+        <div class="card card-article">
+          <div class="card-body card-body-article">
+            <%= image_tag image.variant(resize: '320x320'), style: 'max-width:100%;' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+</div>

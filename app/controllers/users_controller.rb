@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: [:show, :images, :image]
 
   def index
     @users = User.all
@@ -88,13 +88,40 @@ class UsersController < ApplicationController
     end
   end
 
+  def images
+    @images = @user.images
+    @bread_crumb = get_bread_crumb(@target_user)
+  end
+
+  def image
+    @image = ActiveStorage::Attachment.find_by_id(params[:attachment_id])
+    @bread_crumb = get_bread_crumb(@target_user)
+  end
+
 private
+
   def set_user
-    @user = @target_user = User.find(params[:id])
+    if params[:id].present?
+      @user = @target_user = User.find_by_id(params[:id])
+    else
+      @user = current_user
+    end
+  end
+
+  def get_bread_crumb(target_user=nil)
+    bread_crumb = []
+    if target_user.present?
+      bread_crumb << [target_user.nickname, nil]
+      bread_crumb << ['画像アルバム', url_for(action: :images, id: target_user.id)]
+    else
+      bread_crumb << ['画像アルバム', url_for(action: :images)]
+    end
+    bread_crumb
   end
 
   def user_params
-    params.require(:user).permit(:code, :nickname, :lang, :password, :password_confirmation, :current_password, :sex, :birthday, :avatar,
+    params.require(:user).permit([:code, :nickname, :lang, :password, :password_confirmation, :current_password, :sex, :birthday, :avatar] +
+                                 [images: []] +
                                  [user_props_attributes: [:id, :user_id, :key, :value, :auth]])
   end
 end

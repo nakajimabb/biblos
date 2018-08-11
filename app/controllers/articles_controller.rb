@@ -11,12 +11,12 @@ class ArticlesController < ApplicationController
     else
       @articles = @article.where(user_id: current_user_id)
     end
-    @bread_crumb = get_bread_curmb(@parent, @target_group, @target_user)
+    @bread_crumb = get_bread_crumb(@parent, @target_group, @target_user)
   end
 
   def show
     @article = Article.accessible(current_user_id).find(params[:id])
-    @bread_crumb = get_bread_curmb(@article, @target_group, @target_user)
+    @bread_crumb = get_bread_crumb(@article, @target_group, @target_user)
     if @article.directory?
       @parent = @article
       @articles = Article.accessible(current_user_id).where(parent_id: @parent.try(:id))
@@ -27,7 +27,7 @@ class ArticlesController < ApplicationController
   def new
     @parent = Article.find_by_id(params[:parent_id])
     @article = Article.new(parent_id: @parent.try(:id), directory: params[:directory] == 'true')
-    @bread_crumb = get_bread_curmb(@parent)
+    @bread_crumb = get_bread_crumb(@parent)
     @bread_crumb << [@article.directory? ? 'カテゴリ追加' : '記事作成', nil]
   end
 
@@ -41,7 +41,7 @@ class ArticlesController < ApplicationController
       end
       redirect_to @article, notice: '記事を投稿しました。'
     rescue => e
-      @bread_crumb = get_bread_curmb(@article.parent)
+      @bread_crumb = get_bread_crumb(@article.parent)
       @bread_crumb << [@article.directory? ? 'カテゴリ追加' : '記事作成', nil]
       flash[:notice] = e.message
       render :new
@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
 
   def edit
     @article = Article.accessible(current_user_id).find(params[:id])
-    @bread_crumb = get_bread_curmb(@article.parent)
+    @bread_crumb = get_bread_crumb(@article.parent)
     @bread_crumb << [@article.directory? ? 'カテゴリ編集' : '記事編集', nil]
   end
 
@@ -65,7 +65,7 @@ class ArticlesController < ApplicationController
       end
       redirect_to @article, notice: '記事を投稿しました。'
     rescue => e
-      @bread_crumb = get_bread_curmb(@article.parent)
+      @bread_crumb = get_bread_crumb(@article.parent)
       @bread_crumb << [@article.directory? ? 'カテゴリ編集' : '記事編集', nil]
       flash[:notice] = e.message
       render :edit
@@ -113,7 +113,7 @@ private
     result
   end
 
-  def get_bread_curmb(article, target_group=nil, target_user=nil)
+  def get_bread_crumb(article, target_group=nil, target_user=nil)
     bread_crumb = []
     if target_group.present?
       bread_crumb << [target_group.name, nil]

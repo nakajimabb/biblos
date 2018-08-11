@@ -19,4 +19,9 @@
       <% end %>
     </li>
   <% end %>
+  <li class="nav-item">
+    <%= link_to({controller: :users, action: :images, id: @target_user.id}, class: 'nav-link') do %>
+      <i class="nav-icon icon-picture"></i> 画像アルバム
+    <% end %>
+  </li>
 </ul>

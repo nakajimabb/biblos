@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   root 'users#home'
 
   get '/users/home'
+  get '/users/images'
+  get '/users/:id/images', to: 'users#images'
+  get '/users/image/:attachment_id', to: 'users#image'
+  get '/users/:id/image/:attachment_id', to: 'users#image'
   get '/users/edit_profile'
   patch '/users/update_profile', to: 'users#update_profile'
   post '/users/update_used_bibles', to: 'users#update_used_bibles'
