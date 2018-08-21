@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   end
   resources :articles
 
-  resources :vocabularies, :only => [:index]
+  resources :vocabularies, :only => [:index, :update]
 
   get '/:group_code', to: 'groups#detail'
 end

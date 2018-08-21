@@ -90,9 +90,22 @@
         (<%= vocabulary.lemma %>) -- <%= vocabulary.transliteration %>
       </h4>
       <% @vocabularies.each do |vocabulary| %>
-        <div style="margin-left: 10px;">
+        <div style="margin: 10px;">
           <b><%= vocabulary.dictionary.name %></b>
-          <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
+          <% if vocabulary.meaning.present? %>
+            <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
+          <% end %>
+          <% vocabulary.images.each do |image| %>
+            <p><%= image_tag image, style: 'max-width: 640px;' %></p>
+          <% end %>
+          <% if vocabulary.meaning.blank? %>
+            <%= form_for(vocabulary, html: {class: 'form-inline'}) do |f| %>
+              <label>
+                <small><i class="fa fa-plus"></i>&nbsp;画像追加</small>
+                <%= f.file_field :images, multiple: true, onchange: 'submit();', class: 'hidden', style: 'display:none;' %>
+              </label>
+            <% end %>
+          <% end %>
         </div>
       <% end %>
     </div>

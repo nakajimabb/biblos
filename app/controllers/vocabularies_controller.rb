@@ -1,4 +1,6 @@
 class VocabulariesController < ApplicationController
+  before_action :set_vocabulary, only: [:update]
+
   def index
     @bread_crumb = [['聖書メニュー', nil], ['辞書検索', vocabularies_path]]
     if params[:search].present?
@@ -24,5 +26,22 @@ class VocabulariesController < ApplicationController
         end
       end
     end
+  end
+
+  def update
+    @vocabulary.update!(vocabulary_params)
+
+    redirect_back(fallback_location: root_path, notice: '更新しました')
+  rescue => e
+    redirect_back(fallback_location: root_path, alert: e.message)
+  end
+
+private
+  def set_vocabulary
+    @vocabulary = Vocabulary.find(params[:id])
+  end
+
+  def vocabulary_params
+    params.require(:vocabulary).permit(:dictionary_id, :spell, :lemma, :meaning, :outline, :pronunciation, :transliteration, :etymology, :rank, images: [])
   end
 end
