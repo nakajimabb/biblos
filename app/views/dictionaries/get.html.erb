@@ -96,7 +96,7 @@
             <%= simple_format(vocabulary.meaning, style: 'margin-left: 10px;') %>
           <% end %>
           <% vocabulary.images.each do |image| %>
-            <p><%= image_tag image, style: 'max-width: 640px;' %></p>
+            <p><%= image_tag image, style: 'width: 640px;max-width: 100%;' %></p>
           <% end %>
           <% if vocabulary.meaning.blank? %>
             <%= form_for(vocabulary, html: {class: 'form-inline'}) do |f| %>
