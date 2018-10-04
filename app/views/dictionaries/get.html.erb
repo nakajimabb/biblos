@@ -64,6 +64,14 @@
     });
     return msg;
   }
+  function hover_vocab() {
+      var e = $(this);
+      var vocab = e.attr('data-spell');
+      var lemma = e.attr('data-lemma');
+      var msg = '<small class="he">' + vocab + '</small>&nbsp;';
+      msg += '(' + lemma + ')';
+      return msg;
+  }
 
   $(function () {
     $('.select2').select2({theme: "bootstrap"});
@@ -76,6 +84,11 @@
       title: hover_morph,
       html: true,
       container: 'body'
+    });
+    $('.vocab').tooltip({
+        title: hover_vocab,
+        html: true,
+        container: 'body'
     });
   });
 </script>
@@ -91,8 +104,12 @@
           (<%= vocabulary.lemma %>) -- <%= vocabulary.transliteration %>
         </div>
         <div class="pull-right">
-          <%= link_to('<前', {controller: :dictionaries, action: :get, lemma: @prev.lemma}, class: 'btn btn-sm btn-outline-primary') if @prev.present? %>
-          <%= link_to('次>', {controller: :dictionaries, action: :get, lemma: @next.lemma}, class: 'btn btn-sm btn-outline-primary') if @next.present? %>
+          <%= link_to('<前', {controller: :dictionaries, action: :get, lemma: @prev.lemma},
+                      'data-toggle': 'tooltip', 'data-spell': @prev.spell, 'data-lemma': @prev.lemma,
+                      class: 'btn btn-sm btn-outline-primary vocab') if @prev.present? %>
+          <%= link_to('次>', {controller: :dictionaries, action: :get, lemma: @next.lemma},
+                      'data-toggle': 'tooltip', 'data-spell': @next.spell, 'data-lemma': @next.lemma,
+                      class: 'btn btn-sm btn-outline-primary vocab') if @next.present? %>
         </div>
       </h4>
       <% @vocabularies.each do |vocabulary| %>
