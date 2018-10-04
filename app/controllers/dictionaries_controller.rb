@@ -19,6 +19,8 @@ class DictionariesController < ApplicationController
         end
       end
       @vocabularies = @vocabularies.order('dictionaries.rank asc, vocabularies.rank asc')
+      @prev = Vocabulary.where('lemma < ?', @lemma).order(:lemma).last
+      @next = Vocabulary.where('lemma > ?', @lemma).order(:lemma).first
 
       respond_to do |format|
         format.html do

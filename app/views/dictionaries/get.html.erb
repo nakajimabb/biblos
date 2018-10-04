@@ -84,10 +84,16 @@
 <% if @vocabularies.present? %>
   <div class="card">
     <div class="card-body">
-      <h4>
+      <h4 class="clearfix">
         <% vocabulary = @vocabularies.first %>
-        <span class="<%= vocabulary.dictionary.lang %>"><b><%= vocabulary.spell %></b></span>
-        (<%= vocabulary.lemma %>) -- <%= vocabulary.transliteration %>
+        <div class="pull-left">
+          <span class="<%= vocabulary.dictionary.lang %>"><b><%= vocabulary.spell %></b></span>
+          (<%= vocabulary.lemma %>) -- <%= vocabulary.transliteration %>
+        </div>
+        <div class="pull-right">
+          <%= link_to('<前', {controller: :dictionaries, action: :get, lemma: @prev.lemma}, class: 'btn btn-sm btn-outline-primary') if @prev.present? %>
+          <%= link_to('次>', {controller: :dictionaries, action: :get, lemma: @next.lemma}, class: 'btn btn-sm btn-outline-primary') if @next.present? %>
+        </div>
       </h4>
       <% @vocabularies.each do |vocabulary| %>
         <div style="margin: 10px;">
