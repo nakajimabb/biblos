@@ -1,10 +1,10 @@
 class DictionariesController < ApplicationController
   def get
-    if params[:lemma].present?
+    if params.has_key?(:lemma)
       @vocabularies = Vocabulary.accessible(current_user.id)
-      m = params[:lemma].match(/([GH])(\d+)/) if params[:lemma].present?
-      if m.present?
-        @lemma = m[1] + m[2].to_i.to_s
+      m = params[:lemma].match(/([GH])(\d+)/) if params.has_key?(:lemma)
+      if m
+        @lemma = sprintf('%s%04d', m[1], m[2].to_i)
         @vocabularies = @vocabularies.where(lemma: @lemma)
         bible_ids = VocabCount.where(lemma: @lemma).group(:bible_id).pluck(:bible_id)
         @bibles = Bible.where(id: bible_ids)

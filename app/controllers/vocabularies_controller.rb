@@ -3,12 +3,12 @@ class VocabulariesController < ApplicationController
 
   def index
     @bread_crumb = [['聖書メニュー', nil], ['辞書検索', vocabularies_path]]
-    if params[:search].present?
+    if params.has_key(:search)
       params[:search] = params[:search].strip
       vocabularies = Vocabulary.accessible(current_user.id)
       m = params[:search].match(/([GH])(\d+)/) # strong number
       if m
-        lemma = m[1] + m[2].to_i.to_s
+        lemma = sprintf('%s%04d', m[1], m[2].to_i)
         vocabularies = vocabularies.where(lemma: lemma)
       else
         vocabularies = vocabularies.where('spell like ? or meaning like ?', '%' + params[:search] + '%', '%' + params[:search] + '%')
@@ -19,7 +19,7 @@ class VocabulariesController < ApplicationController
       vocabularies = vocabularies.order('dictionaries.lang, spell').limit(100)
       @vocabularies = Hash.new{ |hash, key| hash[key] = [] }
       vocabularies.each do |vocabulary|
-        if vocabulary.lemma.present?
+        if vocabulary.lemma
           @vocabularies[vocabulary.lemma] << vocabulary
         else
           @vocabularies[vocabulary.spell] << vocabulary
