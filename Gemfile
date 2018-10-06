@@ -72,3 +72,8 @@ gem 'rails-i18n'
 gem 'mini_magick'
 
 gem 'rack-mini-profiler', require: false
+
+gem 'pry-rails'
+gem 'pry-doc'
+gem 'pry-stack_explorer'
+gem 'pry-byebug'
