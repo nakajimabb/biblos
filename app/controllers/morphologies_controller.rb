@@ -66,7 +66,7 @@ class MorphologiesController < ApplicationController
         next if line.blank?
         m = line.match(/^\$\$\$/)
         if m.nil? && line.present?
-          m = line[0...-1].match(/(\w+)\.\s+(.+)/)
+          m = line[0...-1].match(/([\w\/]+)\.\s+(.+)/)
           MorphCode.create!(morphology_id: morphology.id, parsing: m[1], remark: m[2])
         end
       end
