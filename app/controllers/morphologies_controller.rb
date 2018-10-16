@@ -2,8 +2,8 @@ class MorphologiesController < ApplicationController
   def get
     parsing = params[:parsing].strip.split.at(0)
     if parsing.present?
-      @morph = MorphCode.where(parsing: parsing).joins(:morphology).order('morphologies.rank').first
-
+      # binary: 大文字小文字を区別
+      @morph = MorphCode.where('parsing = binary ?', parsing).joins(:morphology).order('morphologies.rank').first
       if @morph.present?
         respond_to do |format|
           format.html { render :get }
@@ -60,20 +60,14 @@ class MorphologiesController < ApplicationController
 
   def load_oshm
     begin
-      parsing = nil
       morphology = Morphology.find_by(code: :OSHM)
       file = params[:file].read
       file.each_line do |line|
         next if line.blank?
         m = line.match(/^\$\$\$/)
-        if m.present?
-          parsing = line[3...-1]
-        elsif line.present?
-          m = line[0...-1].match(/\w+\.\s+(.+)/)
-          MorphCode.create!(morphology_id: morphology.id, parsing: parsing, remark: m[1])
-          parsing = nil
-        else
-          parsing = nil
+        if m.nil? && line.present?
+          m = line[0...-1].match(/(\w+)\.\s+(.+)/)
+          MorphCode.create!(morphology_id: morphology.id, parsing: m[1], remark: m[2])
         end
       end
 
