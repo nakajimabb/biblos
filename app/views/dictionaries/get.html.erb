@@ -134,9 +134,41 @@
     </div>
   </div>
 
+  <% if @vocab_assocs.present? %>
+    <div class="card">
+      <div class="card-header">
+        <strong>関連語</strong>&nbsp
+      </div>
+      <div class="card-body">
+        <% @vocab_assocs.each do |_, vocab_assocs| %>
+          <div>
+            <% vocab_assocs.each do |vocab_assoc| %>
+              <% vocab_assoc.vocab_assoc_members.order(:lemma).each_with_index do |vocab_assoc_member, i| %>
+                <% if i == 0 %>
+                  <div style="width:80px;display:inline-block;">
+                    <span class="badge badge-success"><%= vocab_assoc.assoc_type_text %></span>
+                  </div>
+                <% end %>
+                <% if vocab_assoc_member.lemma != @lemma %>
+                  <div style="display:inline-block;">
+                    <%= link_to({controller: :dictionaries, action: :get, lemma: vocab_assoc_member.lemma}, target: '_blank') do %>
+                      <% vocab = Vocabulary.find_by(lemma: vocab_assoc_member.lemma) %>
+                      <span class="he" style="font-size: 120%;"><%= vocab&.spell %></span><small>(<%= vocab_assoc_member.lemma %>)</small>
+                    <% end %>
+                    &nbsp;
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <div class="card-header">
-      参照箇所
+      <strong>参照箇所</strong>&nbsp
     </div>
     <div class="card-body">
       <table class="table table-condensed">
@@ -172,9 +204,9 @@
         </div>
         <div class="card-body" style="padding:5px;">
           <div class="row row-0">
-            <% langs = passages.keys.length %>
-            <% col_class = 'col-md-' + (12/langs).to_s %>
-            <% passages.keys.sort_by{ |lang| Lang::LANG[lang.to_sym] }.each do |lang| %>
+            <% languages = passages.keys %>
+            <% col_class = 'col-md-' + (12/languages.size).to_s %>
+            <% languages.sort_by{ |lang| Lang::LANG[lang.to_sym] }.each do |lang| %>
               <% passages2 = passages[lang] %>
               <div class="<%= col_class %>">
                 <% passages2.each do |code, passage| %>

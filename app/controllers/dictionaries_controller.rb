@@ -21,6 +21,11 @@ class DictionariesController < ApplicationController
       @vocabularies = @vocabularies.order('dictionaries.rank asc, vocabularies.rank asc')
       @prev = Vocabulary.where('lemma < ?', @lemma).order(:lemma).last
       @next = Vocabulary.where('lemma > ?', @lemma).order(:lemma).first
+      @vocab_assocs = Hash.new { |hash, key| hash[key] = [] }
+      vocab_assocs = VocabAssoc.joins(:vocab_assoc_members).where(vocab_assoc_members: {lemma: @lemma})
+      vocab_assocs.each do |vocab_assoc|
+        @vocab_assocs[vocab_assoc.assoc_type] << vocab_assoc
+      end
 
       respond_to do |format|
         format.html do

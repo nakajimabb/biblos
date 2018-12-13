@@ -1,0 +1,12 @@
+ja:
+  activerecord:
+    attributes:
+      vocab_assoc:
+        assoc_type: '関連種別'
+  enum:
+    vocab_assoc:
+      assoc_type:
+        derivative: '派生語'
+        synonym: '類義語'
+        related: '関連語'
+        translated: '訳語'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_114039) do
+ActiveRecord::Schema.define(version: 2018_12_13_143412) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -262,6 +262,23 @@ ActiveRecord::Schema.define(version: 2018_07_17_114039) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "vocab_assoc_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "vocab_assoc_id", null: false
+    t.string "lemma", null: false
+    t.string "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vocab_assoc_id", "lemma"], name: "index_vocab_assoc_members_on_vocab_assoc_id_and_lemma", unique: true
+    t.index ["vocab_assoc_id"], name: "index_vocab_assoc_members_on_vocab_assoc_id"
+  end
+
+  create_table "vocab_assocs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "assoc_type", limit: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "vocab_counts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "bible_id", null: false
     t.integer "book_code", limit: 2, null: false
@@ -324,6 +341,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_114039) do
   add_foreign_key "used_bibles", "users"
   add_foreign_key "used_langs", "users"
   add_foreign_key "user_props", "users"
+  add_foreign_key "vocab_assoc_members", "vocab_assocs"
   add_foreign_key "vocab_counts", "bibles"
   add_foreign_key "vocab_indices", "vocab_counts"
   add_foreign_key "vocabularies", "dictionaries"
