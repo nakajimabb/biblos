@@ -151,7 +151,7 @@
                 <% end %>
                 <% if vocab_assoc_member.lemma != @lemma %>
                   <div style="display:inline-block;">
-                    <%= link_to({controller: :dictionaries, action: :get, lemma: vocab_assoc_member.lemma}, target: '_blank') do %>
+                    <%= link_to(controller: :dictionaries, action: :get, lemma: vocab_assoc_member.lemma) do %>
                       <% vocab = Vocabulary.find_by(lemma: vocab_assoc_member.lemma) %>
                       <span class="he" style="font-size: 120%;"><%= vocab&.spell %></span><small>(<%= vocab_assoc_member.lemma %>)</small>
                     <% end %>
