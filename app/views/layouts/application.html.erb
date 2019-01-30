@@ -1,145 +1,16 @@
-<!--
- * CoreUI Pro - Bootstrap 4 Admin Template
- * @version v1.0.8
- * @link http://coreui.io/pro/
- * Copyright (c) 2018 creativeLabs Łukasz Holeczek
- * @license http://coreui.io/pro/license/
- -->
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Biblos.jp">
-  <meta name="author" content="Łukasz Holeczek">
-  <meta name="keyword" content=",">
-  <link rel="shortcut icon" href="<%= image_path('coreui/img/favicon.png') %>">
-  <title>Biblos.jp</title>
+  <title>Biblos</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'application' %>
 </head>
 
-<!-- BODY options, add following classes to body to change options
-
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Brand options
-1. '.brand-minimized'       - Minimized brand (Only symbol)
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-minimized'			- Minimized Sidebar (Only icons)
-5. '.sidebar-compact'			  - Compact Sidebar
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Breadcrumb options
-1. '.breadcrumb-fixed'			- Fixed Breadcrumb
-
-// Footer options
-1. '.footer-fixed'					- Fixed footer
-
--->
-
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden
-    <%= (cookies['sidebar-minimized'] == 'on') ? 'sidebar-minimized brand-minimized' : '' %>
-    <%= (cookies['sidebar-hidden'] == 'on') ? 'sidebar-hidden' : '' %>" >
-  <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="/"></a>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <% if user_signed_in? %>
-      <ul class="nav navbar-nav d-md-down-none mr-auto">
-        <li class="nav-item px-3">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item px-3">
-          <a class="nav-link" href="/bibles/">Bible</a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item">
-          <% if current_user.avatar.attached? %>
-            <%= image_tag url_for(current_user.avatar), class: 'avatar-xs rounded-circle' %>&nbsp;
-          <% end %>
-          <%= current_user.nickname %> <small>さん</small>
-        </li>
-        <li class="nav-item px-3">
-          <%= link_to t('menu.user.sign_out'), destroy_user_session_path, method: :delete, class: 'btn btn-default btn-flat' %>
-        </li>
-      </ul>
-    <% end %>
-  </header>
-  <div class="app-body">
-    <div class="sidebar">
-      <nav class="sidebar-nav">
-
-        <% if @target_group %>
-          <%= render 'layouts/menu_group' %>
-        <% elsif @target_user.present? %>
-          <%= render 'layouts/menu_user' %>
-        <% elsif user_signed_in? %>
-          <%= render 'layouts/menu_default' %>
-        <% end %>
-
-      </nav>
-      <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-    </div>
-    <!-- Main content -->
-    <main class="main">
-      <ol class="breadcrumb">
-        <%= render 'layouts/bread_crumb' %>
-        <!-- Breadcrumb Menu-->
-        <li class="breadcrumb-menu d-md-down-none">
-          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <%= yield :sub_menu %>
-          </div>
-        </li>
-      </ol>
-
-      <% if notice.present? %>
-        <p class="alert alert-notice"><%= notice %><% flash[:notice] = nil %></p>
-      <% end %>
-      <% if alert.present? %>
-        <p class="alert alert-error"><%= alert %><% flash[:alert] = nil %></p>
-      <% end %>
-
-      <div class="container-fluid">
-        <%= yield %>
-        <%= javascript_pack_tag 'application' %>
-      </div>
-      <!-- /.conainer-fluid -->
-    </main>
-
-    <script>
-      <%= render 'layouts/app.js' %>
-
-      $(function () {
-        $('.navbar-toggler').click(function(){
-          var value = $("body").hasClass("sidebar-hidden") ? "on" : "off";
-          document.cookie = "sidebar-hidden=" + value + '; path=/';
-        });
-        $('.sidebar-minimizer').click(function(){
-          var value = $("body").hasClass("sidebar-minimized") ? "on" : "off";
-          document.cookie = "sidebar-minimized=" + value + '; path=/';
-        });
-      });
-    </script>
-  </div>
-</body>
+  <body>
+    <div id="root"></div>
+    <%= yield %>
+    <%= javascript_pack_tag 'application' %>
+  </body>
 </html>
-

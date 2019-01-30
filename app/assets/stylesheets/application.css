@@ -11,15 +11,6 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_tree .
- *= require coreui/vendors/css/flag-icon.min.css
- *= require coreui/vendors/css/font-awesome.min.css
- *= require coreui/vendors/css/simple-line-icons.min.css
- *= require coreui/vendors/css/simple-line-icons.min.css
- *= require coreui/css/style.css
- *= require coreui/vendors/css/daterangepicker.min.css
- *= require coreui/vendors/css/gauge.min.css
- *= require coreui/vendors/css/toastr.min.css
- *= require coreui/vendors/css/select2.min.css
  *= require bible.css
  *= require user.css
  *= require_self
