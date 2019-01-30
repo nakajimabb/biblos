@@ -1,11 +1,11 @@
 // Styles
 // CoreUI Icons Set
-@import '~@coreui/icons/css/coreui-icons.css';
+@import 'node_modules/@coreui/icons/css/coreui-icons.css';
 // Import Flag Icons Set
-@import '~flag-icon-css/css/flag-icon.min.css';
+@import 'node_modules/flag-icon-css/css/flag-icon.css';
 // Import Font Awesome Icons Set
-@import '~font-awesome/css/font-awesome.min.css';
+@import 'node_modules/font-awesome/css/font-awesome.css';
 // Import Simple Line Icons Set
-@import '~simple-line-icons/css/simple-line-icons.css';
+@import 'node_modules/simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 @import './scss/style.scss';
