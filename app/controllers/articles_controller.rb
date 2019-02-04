@@ -12,6 +12,11 @@ class ArticlesController < ApplicationController
       @articles = @article.where(user_id: current_user_id)
     end
     @bread_crumb = get_bread_crumb(@parent, @target_group, @target_user)
+
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @articles.to_json }
+    end
   end
 
   def show

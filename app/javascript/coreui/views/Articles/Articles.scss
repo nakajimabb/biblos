@@ -1,0 +1,14 @@
+.card .article-title {
+  height: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px 10px;
+}
+
+.card .article-headline {
+  height: 200px;
+  overflow: hidden;
+  padding: 0;
+  margin: 10px;
+}
