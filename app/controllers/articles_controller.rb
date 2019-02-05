@@ -27,6 +27,11 @@ class ArticlesController < ApplicationController
       @articles = Article.accessible(current_user_id).where(parent_id: @parent.try(:id))
       render 'index'
     end
+
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @article.to_json }
+    end
   end
 
   def new

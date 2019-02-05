@@ -1,0 +1,30 @@
+.card .article-title {
+  height: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px 10px;
+}
+
+.card .article-headline {
+  height: 200px;
+  overflow: hidden;
+  padding: 0;
+  margin: 10px;
+}
+
+a.linked-card {
+  color: initial;
+}
+
+a:hover.linked-card {
+  text-decoration: none;
+}
+
+a:hover.linked-card .card {
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+  -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+  -o-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+  -ms-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+}

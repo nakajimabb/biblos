@@ -1,8 +1,10 @@
-import './Articles.scss';
+import './index.scss';
 
 import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardFooter, CardHeader, Col, Row, Collapse, Fade } from 'reactstrap';
 import { AppSwitch } from '@coreui/react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+const Article = React.lazy(() => import('./show'));
 
 class Articles extends Component {
   constructor(props) {
@@ -39,14 +41,16 @@ class Articles extends Component {
      const list = this.state.articles.map((article, index) => {
      return  (
          <Col xs="12" sm="4" md="3">
-           <Card>
-               <CardHeader className="article-title">
-                   {article.title}
-               </CardHeader>
-               <CardBody className="article-headline">
-                   {article.headline}
-               </CardBody>
-           </Card>
+             <Link to={`/articles/${article.id}`} className="linked-card">
+                <Card>
+                    <CardHeader className="article-title">
+                       {article.title}
+                   </CardHeader>
+                   <CardBody className="article-headline">
+                       {article.headline}
+                   </CardBody>
+                </Card>
+            </Link>
          </Col>
          );
      });
