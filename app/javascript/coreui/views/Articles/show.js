@@ -18,7 +18,8 @@ class Article extends Component {
         axios.get(`/articles/${id}.json`)
             .then((results) => {
                 console.log(results);
-                this.setState(results.data);
+                this.setState(results.data.article);
+                this.props.setBreadcrumb(results.data.breadcrumb);
             })
             .catch((data) =>{
                 console.log(data);

@@ -12,16 +12,18 @@ class ArticlesController < ApplicationController
       @articles = @article.where(user_id: current_user_id)
     end
     @bread_crumb = get_bread_crumb(@parent, @target_group, @target_user)
+    breadcrumb = @bread_crumb.map { |v| v[0] }
 
     respond_to do |format|
       format.html { render :index }
-      format.json { render json: @articles.to_json }
+      format.json { render json: {articles: @articles, breadcrumb: breadcrumb}.to_json }
     end
   end
 
   def show
     @article = Article.accessible(current_user_id).find(params[:id])
     @bread_crumb = get_bread_crumb(@article, @target_group, @target_user)
+    breadcrumb = @bread_crumb.map { |v| v[0] }
     if @article.directory?
       @parent = @article
       @articles = Article.accessible(current_user_id).where(parent_id: @parent.try(:id))
@@ -30,7 +32,7 @@ class ArticlesController < ApplicationController
 
     respond_to do |format|
       format.html { render :show }
-      format.json { render json: @article.to_json }
+      format.json { render json: { article: @article, breadcrumb: breadcrumb }.to_json }
     end
   end
 
